@@ -1,0 +1,5 @@
+Average precision: 0.200
+Average recall: 0.075
+Average accuracy: 0.746
+Average number of sentences: 9.000
+Average ratio: 0.083

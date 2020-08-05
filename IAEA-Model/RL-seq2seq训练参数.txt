@@ -1,0 +1,90 @@
+预训练
+--mode=train --data_path=data/finished_files2/chunked/train_* --vocab_path=data/finished_files2/vocab --log_root=working_dir/RLSeq2Seq/ --exp_name=intradecoder-temporalattention-withpretraining --batch_size=5 --max_iter=3 --use_temporal_attention=True --intradecoder=True --rl_training=False
+预训练的评估
+--mode=eval --data_path=data/finished_files2/chunked/val_* --vocab_path=data/finished_files2/vocab --log_root=working_dir/RLSeq2Seq/ --exp_name=intradecoder-temporalattention-withpretraining --batch_size=5 --use_temporal_attention=True --intradecoder=True --rl_training=False
+
+训练设置
+--mode=train --data_path=data/finished_files2/chunked/train_* --vocab_path=data/finished_files2/vocab
+--log_root=working_dir/RLSeq2Seq/ --exp_name=intradecoder-temporalattention-withpretraining 
+--batch_size=5 --max_iter=200 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True 
+--convert_to_reinforce_model=True
+训练
+--mode=train --data_path=data/finished_files2/chunked/train_* --vocab_path=data/finished_files2/vocab
+--log_root=working_dir/RLSeq2Seq/ --exp_name=intradecoder-temporalattention-withpretraining 
+--batch_size=5 --max_iter=200 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True 
+
+评估
+--mode=eval --data_path=data/finished_files2/chunked/val_* --vocab_path=data/finished_files2/vocab
+--log_root=working_dir/RLSeq2Seq/ --exp_name=intradecoder-temporalattention-withpretraining 
+--batch_size=5 --use_temporal_attention=True --intradecoder=True --rl_training=True
+
+
+
+解码
+--mode=decode --data_path=data/finished_files2/chunked/val_* --vocab_path=data/finished_files2/vocab --log_root=working_dir/RLSeq2Seq/ --exp_name=intradecoder-temporalattention-withpretraining --rl_training=True --intradecoder=True --use_temporal_attention=True --single_pass=1 --beam_size=4 --decode_after=0
+
+
+selector
+
+训练
+python main_cpu_final2.py --model=selector --mode=train --data_path=data/finished_files_twitter_inconsistent/chunked/train_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new --exp_name=exp_sample --max_art_len=110 --max_sent_len=50 --max_train_iter=1500 --batch_size=5 --save_model_every=10 --model_max_to_keep=10
+
+评估
+python main_cpu_final2.py --model=selector --mode=eval --data_path=data/finished_files_twitter_inconsistent/chunked/val_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new --exp_name=exp_sample --max_art_len=110 --max_sent_len=50 --batch_size=5
+
+测试
+python main_cpu_final3.py --model=selector --mode=evalall --data_path=data/finished_files_twitter_inconsistent/chunked/test_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new3 --exp_name=exp_sample --max_art_len=110 --max_sent_len=50 --max_select_sent=10 --single_pass=True --select_method=prob --thres=0.5 --save_pkl=True --eval_ckpt_path=log_cpu_new/selector/exp_sample/eval/bestmodel-1500 --load_best_eval_model=False
+
+
+
+
+
+融合起来的训练参数
+预训练 1000 1-20000
+python main_cpu_final3.py --model=rewriter --mode=train --data_path=data/finished_files_twitter_inconsistent/chunked/train_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new7 --exp_name=exp_sample --batch_size=5 --max_enc_steps=400 --max_dec_steps=100 --max_train_iter=1000 --save_model_every=100 --model_max_to_keep=10 --use_temporal_attention=True --intradecoder=True --rl_training=False
+
+预训练的评估
+python main_cpu_final3.py --model=rewriter --mode=eval --data_path=data/finished_files_twitter_inconsistent/chunked/val_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new7 --exp_name=exp_sample --batch_size=5 --use_temporal_attention=True --intradecoder=True --rl_training=False --max_enc_steps=400 --max_dec_steps=100 --eval_method=loss
+
+强化学习训练设置
+python main_cpu_final3.py --model=rewriter --mode=train --data_path=data/finished_files_twitter_inconsistent/chunked/train_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new7 --exp_name=exp_sample --batch_size=5 --max_train_iter=5000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True  --convert_to_reinforce_model=True --max_enc_steps=400 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10
+
+强化学习训练
+
+# 20001-60000
+python main_cpu_final3.py --model=rewriter --mode=train --data_path=data/finished_files_twitter_inconsistent/chunked/train_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new7 --exp_name=exp_sample --batch_size=5 --max_train_iter=5000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True --max_enc_steps=400 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10
+
+python main_cpu_final3.py --model=rewriter --mode=eval --data_path=data/finished_files_twitter_inconsistent/chunked/val_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new7 --exp_name=exp_sample --batch_size=5 --use_temporal_attention=True --intradecoder=True --rl_training=True --max_enc_steps=400 --max_dec_steps=100 --eval_method=loss
+
+解码
+
+python main_cpu_final3.py --model=rewriter --mode=evalall --data_path=data/finished_files_twitter_inconsistent/chunked/test_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new7 --exp_name=exp_sample --rl_training=True --intradecoder=True --use_temporal_attention=True --single_pass=1 --decode_method=beam --single_pass=1 --eval_method=loss --load_best_eval_model=False --eval_ckpt_path='' --decode_after=0
+
+# coverage
+
+python main_cpu_final3.py --model=rewriter --mode=train --data_path=data/finished_files_twitter_inconsistent/chunked/train_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new7 --exp_name=exp_sample --batch_size=5 --max_train_iter=1000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True --max_enc_steps=400 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10 --coverage=True --convert_to_coverage_model=True
+
+# 训练
+python main_cpu_final3.py --model=rewriter --mode=train --data_path=data/finished_files_twitter_inconsistent/chunked/train_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new7 --exp_name=exp_sample --batch_size=5 --max_train_iter=1000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True --max_enc_steps=00 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10 --coverage=True
+
+评估
+python main_cpu_final3.py --model=rewriter --mode=eval --data_path=data/finished_files_twitter_inconsistent/chunked/val_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new7 --exp_name=exp_sample --batch_size=5 --use_temporal_attention=True --intradecoder=True --rl_training=True --max_enc_steps=600 --max_dec_steps=100 --eval_method=loss --coverage=True
+
+解码
+python main_cpu_final3.py --model=rewriter --mode=evalall --data_path=data/finished_files_twitter_inconsistent/chunked/test_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new7 --exp_name=exp_sample --rl_training=True --intradecoder=True --use_temporal_attention=True --single_pass=1 --coverage=True --decode_method=beam --single_pass=1 --eval_method=loss --load_best_eval_model=False --eval_ckpt_path='' --decode_after=0
+
+
+
+
+
+en2end2
+
+训练
+python main_cpu_final3.py --model=end2end --mode=train --data_path=data/finished_files_twitter_inconsistent/chunked/train_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new6 --exp_name=exp_sample --max_enc_steps=800 --max_dec_steps=120 --max_train_iter=3000 --batch_size=5 --use_temporal_attention=True --intradecoder=True --eta=2.5E-05 --max_art_len=110 --max_sent_len=50 --lr=0.01 --selector_loss_wt=5.0 --inconsistent_loss=True --inconsistent_topk=3 --save_model_every=150 --model_max_to_keep=20 --rl_training=True --coverage=True --pretrained_selector_path=log_cpu_new/selector/exp_sample/eval/bestmodel-1500 --pretrained_rewriter_path=log_cpu_new/rewriter/exp_sample/train/model.ckpt_cov-7000 --lr=0.01
+
+评估
+
+python main_cpu_final3.py --model=end2end --mode=eval --data_path=data/finished_files_twitter_inconsistent/chunked/val_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new6 --exp_name=exp_sample --max_enc_steps=800 --max_dec_steps=120 --use_temporal_attention=True --intradecoder=True --eta=2.5E-05 --max_art_len=110 --max_sent_len=50 --batch_size=5 --selector_loss_wt=5.0 --decode_method=greedy --inconsistent_loss=True --inconsistent_topk=3 --eval_method=loss --start_eval_rouge=150 --coverage=True --rl_training=True
+
+解码
+python main_cpu_final3.py --model=end2end --mode=evalall --data_path=data/finished_files_twitter_inconsistent/chunked/test_* --vocab_path=data/finished_files_twitter_inconsistent/vocab --log_root=log_cpu_new5 --exp_name=exp_sample --max_enc_steps=800 --max_dec_steps=120 --use_temporal_attention=True --intradecoder=True --eta=2.5E-05 --max_art_len=110 --max_sent_len=50 --decode_method=beam --coverage=True --single_pass=1 --save_pkl=True --save_vis=False --inconsistent_loss=True --inconsistent_topk=3 --eval_ckpt_path=log_cpu_new5/end2end/exp_sample/eval_loss/bestmodel-1500 --eval_method=loss --load_best_eval_model=False --coverage=True --rl_training=True
