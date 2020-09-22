@@ -13,32 +13,6 @@ import Data_helper_Tweet_npyload_nopos as Data_helper
 import BuildModelForTweet_nopos_add as BuildModel
 from keras.callbacks import ModelCheckpoint
 
-
-def freeze_session(session, keep_var_names=None, output_names=None, clear_devices=True):
-    """
-    将输入的Session保存为静态的计算图结构.
-    创建一个新的计算图，其中的节点以及权重和输入的Session相同. 新的计算图会将输入Session中不参与计算的部分删除。
-    @param session 需要被保存的Session.
-    @param keep_var_names 一个记录了需要被保存的变量名的list，若为None则默认保存所有的变量.
-    @param output_names 计算图相关输出的name list.
-    @param clear_devices 若为True的话会删除不参与计算的部分，这样更利于移植，否则可能移植失败
-    @return The frozen graph definition.
-    """
-    from tensorflow.python.framework.graph_util import convert_variables_to_constants
-    graph = session.graph
-    with graph.as_default():
-        freeze_var_names = list(set(v.op.name for v in tf.global_variables()).difference(keep_var_names or []))
-        output_names = output_names or []
-        output_names += [v.op.name for v in tf.global_variables()]
-        input_graph_def = graph.as_graph_def()
-        if clear_devices:
-            for node in input_graph_def.node:
-                node.device = ""
-        frozen_graph = convert_variables_to_constants(session, input_graph_def,
-                                                      output_names, freeze_var_names)
-        return frozen_graph
-
-
 if __name__ == "__main__":
     # num_cores = 4
     # config = tf.ConfigProto(intra_op_parallelism_threads=num_cores, \
@@ -49,15 +23,15 @@ if __name__ == "__main__":
     # os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
     # gpu_options = tf.GPUOptions(allow_growth=True)
     # sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
-    checkpoint1 = ModelCheckpoint(filepath='best_model_1_100_nopos_add.h5', monitor='val_acc', mode='auto', save_best_only='True')
-    checkpoint2 = ModelCheckpoint(filepath='best_model_22_100_nopos_add.h5', monitor='val_acc', mode='auto', save_best_only='True')
+    checkpoint1 = ModelCheckpoint(filepath='best_model_1_50_nopos_add_8m6.h5', monitor='val_acc', mode='auto', save_best_only='True')
+    checkpoint2 = ModelCheckpoint(filepath='best_model_22_50_nopos_add_8m6.h5', monitor='val_acc', mode='auto', save_best_only='True')
     MEMORY_MB_MAX = 1600000 # maximum memory you can use
     MAX_SEQUENCE_LENGTH = 50 # Maximum sequance lenght 500 words
-    MAX_NB_WORDS = 55000 # Maximum number of unique words
+    MAX_NB_WORDS = 50000 # Maximum number of unique words
     EMBEDDING_DIM = 100 #embedding dimension you can change it to {25, 100, 150, and 300} but need to change glove version
     batch_size_L1 = 64 # batch size in Level 1
     batch_size_L2 = 64 # batch size in Level 2
-    epochs = 100
+    epochs = 50
 
     L1_model =2 # 0 is DNN, 1 is CNN, and 2 is RNN for Level 1
     L2_model =2 # 0 is DNN, 1 is CNN, and 2 is RNN for Level 2
@@ -109,7 +83,7 @@ if __name__ == "__main__":
 
         print("save embedding layer model success")
         print("Saving model to disk \n")
-        mp = "model1_100_nopos_add.h5"
+        mp = "model1_50_nopos_add_8m6.h5"
         model.save(mp)
 
     # RNN Level 2
@@ -125,7 +99,7 @@ if __name__ == "__main__":
                       batch_size=batch_size_L2,
                       callbacks=callback_lists)
         print("Saving model to disk \n")
-        mp = "model22_100_nopos_add.h5"
+        mp = "model22_50_nopos_add_8m6.h5"
         model2.save(mp)
 
 

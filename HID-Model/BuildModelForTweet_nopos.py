@@ -17,10 +17,10 @@ EMBEDDING_DIM is an int value for dimention of word embedding look at data_helpe
 '''
 
 
-def Max_layer(tensor):
-    def max(tensor):
-        return keras.backend.max(tensor, axis=1)
-    return Lambda(max)(tensor)
+def Mean_layer(tensor):
+    def mean(tensor):
+        return keras.backend.mean(tensor, axis=1)
+    return Lambda(mean)(tensor)
 
 
 def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, EMBEDDING_DIM):
@@ -41,7 +41,7 @@ def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, 
                                     mask_zero=True)(x1_input)
     gru_out_x1 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(embedded_x1)
     sent_gru_out_x1 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(gru_out_x1)   # 多层gru  batch_size,50,100
-    sent_gru_out_x1 = Max_layer(sent_gru_out_x1)
+    sent_gru_out_x1 = Mean_layer(sent_gru_out_x1)
     # print(sent_gru_out_x1)
     sent_feat_x1 = layers.Dense(200, activation='tanh')(sent_gru_out_x1)
     sent_feat_x1 = layers.Dropout(rate=0.2)(sent_feat_x1)
@@ -55,11 +55,11 @@ def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, 
                                     mask_zero=True)(x2_input)
     gru_out_x2 =Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(embedded_x2)  # 多层gru
     sent_gru_out_x2 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(gru_out_x2)
-    sent_gru_out_x2 = Max_layer(sent_gru_out_x2)
+    sent_gru_out_x2 = Mean_layer(sent_gru_out_x2)
     # print(sent_gru_out_x2)
     sent_feat_x2 = layers.Dense(200, activation='tanh')(sent_gru_out_x2)
     sent_feat_x2 = layers.Dropout(rate=0.2)(sent_feat_x2)
-    merged = layers.add([sent_feat_x1, sent_feat_x2])
+    merged = layers.subtract([sent_feat_x1, sent_feat_x2])
     # concatenated = Flatten()(concatenated)
     output = layers.Dense(1, activation='sigmoid')(merged)
     print("class:", nClasses)
@@ -75,7 +75,7 @@ def buildModel_RNN_layer2(word_index, embeddings_index, nClasses, MAX_SEQUENCE_L
     # construct model
 
 
-    model = load_model('best_model_1_100_nopos_add_3m29.h5', custom_objects={'keras': keras})
+    model = load_model('best_model_1_50_nopos_sub_8m10.h5', custom_objects={'keras': keras})
     model1 = Model(inputs=model.input, outputs=model.get_layer('lambda_1').output)
     model2 = Model(inputs=model.input, outputs=model.get_layer('lambda_2').output)
     for layer in model1.layers:
@@ -89,7 +89,7 @@ def buildModel_RNN_layer2(word_index, embeddings_index, nClasses, MAX_SEQUENCE_L
 
     sent_feat_x2 = layers.Dense(200, activation='tanh')(output2)
     sent_feat_x2 = layers.Dropout(rate=0.2)(sent_feat_x2)
-    merged = layers.add([sent_feat_x1, sent_feat_x2])
+    merged = layers.subtract([sent_feat_x1, sent_feat_x2])
     output = layers.Dense(1, activation='sigmoid')(merged)
     print("class:" , nClasses)
     self_model = Model(model1.inputs, output)

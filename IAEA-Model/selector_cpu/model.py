@@ -21,13 +21,8 @@ import sys
 import time
 import numpy as np
 import tensorflow as tf
-import keras
-from keras.models import load_model
 
 from tensorflow.contrib.tensorboard.plugins import projector
-# from load_inconsistent_pretrain import load_model
-# from keras.models import load_model
-# import keras
 FLAGS = tf.app.flags.FLAGS
 
 class SentenceSelector(object):
@@ -338,12 +333,12 @@ class SentenceSelector(object):
       # bias_Dense_1 = np.load("data/relevant_bias_nopos.npy")
       # print((weight_Dense_1.shape, " ", bias_Dense_1.shape))
 
-      weight_Dense = np.load("data/inconsistent_weight_nopos_3m29.npy")
-      # weight_Dense_2 = tf.convert_to_tensor(weight_Dense_2)
-      # weight_Dense = tf.get_variable("weight_Dense", initializer=weight_Dense_2,trainable=True)
-      bias_Dense = np.load("data/inconsistent_bias_nopos_3m29.npy")
-      # bias_Dense_2 = tf.convert_to_tensor(bias_Dense_2)
-      # bias_Dense = tf.get_variable("bias_Dense",initializer=bias_Dense_2,trainable=True)
+      weight_Dense = np.load("data/inconsistent_weight_nopos_8m6.npy")
+      weight_Dense_2 = tf.convert_to_tensor(weight_Dense)
+      weight_Dense = tf.get_variable("weight_Dense", initializer=weight_Dense_2, trainable=False)
+      bias_Dense = np.load("data/inconsistent_bias_nopos_8m6.npy")
+      bias_Dense_2 = tf.convert_to_tensor(bias_Dense)
+      bias_Dense = tf.get_variable("bias_Dense",initializer=bias_Dense_2,trainable=False)
       print((weight_Dense.shape, " ", bias_Dense.shape))
       # pb_filename = ""   # 后期加上去
 
@@ -559,7 +554,7 @@ class SentenceSelector(object):
               # print("flag..", flag)
       logists = final_score
       print(logists)
-      print("不一致过程结束")
+      print("inconsistent end")
       self.probs = tf.sigmoid(logists)
       print(self.probs)
       self.probs = self.probs * self._art_padding_mask  # （5，50）  每个句子被抽到的概率

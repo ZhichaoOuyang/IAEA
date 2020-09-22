@@ -20,7 +20,7 @@ import os
 import time
 import tensorflow as tf
 import sys
-sys.path.append(r'/data/chao/unified-summarization-master/RLrewriter3')
+sys.path.append(r'/workspace/data/chao/unified-summarization-master/RLrewriter3')
 import beam_search
 import data
 import json

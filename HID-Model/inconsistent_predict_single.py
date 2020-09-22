@@ -1,19 +1,20 @@
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 from keras.models import load_model
 import numpy as np
 import re
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
-import os
 from stanfordcorenlp import StanfordCoreNLP
 import string
-
+import keras
 
 if __name__ == "__main__":
-    model_path = 'best_model_single.h5'
-    model = load_model(model_path)
-    x1 = np.load("NNx1_test.npy")
-    x2 = np.load("NNx1_test.npy")
+    model_path = 'best_model_single_nopos_8m6.h5'
+    model = load_model(model_path, custom_objects={'keras': keras})
+    x1 = np.load("NNx1_test_nopos.npy")
+    x2 = np.load("NNx1_test_nopos.npy")
     x1 = np.array(x1)
     x2 = np.array(x2)
     print(len(x1))
@@ -26,8 +27,8 @@ if __name__ == "__main__":
         else:
             result.append(0)
     result = np.array(result)
-    np.save("resultSingle.npy",result)
-    result = np.load("resultSingle.npy")
+    np.save("resultSingle_nopos_8m17.npy",result)
+    result = np.load("resultSingle_nopos_8m17.npy")
     result = np.array(result)
     flag = 0
     flag2 = 0

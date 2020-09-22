@@ -1,0 +1,173 @@
+nohup: ignoring input
+Using TensorFlow backend.
+Glove/glove.twitter.27B.100d.txt
+Total 1193514 word vectors.
+Loading Data is Done
+Create model of RNN
+WARNING:tensorflow:From /home/chaotf/.local/lib/python3.7/site-packages/tensorflow/python/ops/resource_variable_ops.py:435: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Colocations handled automatically by placer.
+2020-08-07 12:35:35.436768: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-08-07 12:35:35.468918: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2500010000 Hz
+2020-08-07 12:35:35.472375: I tensorflow/compiler/xla/service/service.cc:150] XLA service 0x564b38334700 executing computations on platform Host. Devices:
+2020-08-07 12:35:35.472428: I tensorflow/compiler/xla/service/service.cc:158]   StreamExecutor device (0): <undefined>, <undefined>
+2020-08-07 12:35:38.979342: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1433] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:83:00.0
+totalMemory: 10.73GiB freeMemory: 10.57GiB
+2020-08-07 12:35:38.979387: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1512] Adding visible gpu devices: 0
+2020-08-07 12:35:38.980349: I tensorflow/core/common_runtime/gpu/gpu_device.cc:984] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-08-07 12:35:38.980365: I tensorflow/core/common_runtime/gpu/gpu_device.cc:990]      0 
+2020-08-07 12:35:38.980373: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1003] 0:   N 
+2020-08-07 12:35:38.980840: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10284 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:83:00.0, compute capability: 7.5)
+2020-08-07 12:35:38.982337: I tensorflow/compiler/xla/service/service.cc:150] XLA service 0x564b37c382d0 executing computations on platform CUDA. Devices:
+2020-08-07 12:35:38.982358: I tensorflow/compiler/xla/service/service.cc:158]   StreamExecutor device (0): GeForce RTX 2080 Ti, Compute Capability 7.5
+class: 2
+Model: "model_1"
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+x1_input (InputLayer)           (None, 50)           0                                            
+__________________________________________________________________________________________________
+x2_input (InputLayer)           (None, 50)           0                                            
+__________________________________________________________________________________________________
+embedding_1 (Embedding)         (None, 50, 100)      6078700     x1_input[0][0]                   
+__________________________________________________________________________________________________
+embedding_2 (Embedding)         (None, 50, 100)      6078700     x2_input[0][0]                   
+__________________________________________________________________________________________________
+bidirectional_1 (Bidirectional) (None, 50, 200)      120600      embedding_1[0][0]                
+__________________________________________________________________________________________________
+bidirectional_3 (Bidirectional) (None, 50, 200)      120600      embedding_2[0][0]                
+__________________________________________________________________________________________________
+bidirectional_2 (Bidirectional) (None, 50, 200)      180600      bidirectional_1[0][0]            
+__________________________________________________________________________________________________
+bidirectional_4 (Bidirectional) (None, 50, 200)      180600      bidirectional_3[0][0]            
+__________________________________________________________________________________________________
+lambda_1 (Lambda)               (None, 200)          0           bidirectional_2[0][0]            
+__________________________________________________________________________________________________
+lambda_2 (Lambda)               (None, 200)          0           bidirectional_4[0][0]            
+__________________________________________________________________________________________________
+dense_1 (Dense)                 (None, 200)          40200       lambda_1[0][0]                   
+__________________________________________________________________________________________________
+dense_2 (Dense)                 (None, 200)          40200       lambda_2[0][0]                   
+__________________________________________________________________________________________________
+dropout_1 (Dropout)             (None, 200)          0           dense_1[0][0]                    
+__________________________________________________________________________________________________
+dropout_2 (Dropout)             (None, 200)          0           dense_2[0][0]                    
+__________________________________________________________________________________________________
+subtract_1 (Subtract)           (None, 200)          0           dropout_1[0][0]                  
+                                                                 dropout_2[0][0]                  
+__________________________________________________________________________________________________
+dense_3 (Dense)                 (None, 1)            201         subtract_1[0][0]                 
+==================================================================================================
+Total params: 12,840,401
+Trainable params: 683,001
+Non-trainable params: 12,157,400
+__________________________________________________________________________________________________
+WARNING:tensorflow:From /home/chaotf/.local/lib/python3.7/site-packages/tensorflow/python/ops/math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.cast instead.
+Train on 83036 samples, validate on 20760 samples
+Epoch 1/50
+2020-08-07 12:35:49.583435: I tensorflow/stream_executor/dso_loader.cc:152] successfully opened CUDA library libcublas.so.10.0 locally
+ - 861s - loss: 0.2822 - acc: 0.8908 - val_loss: 0.3210 - val_acc: 0.8715
+Epoch 2/50
+ - 865s - loss: 0.2412 - acc: 0.9098 - val_loss: 0.3117 - val_acc: 0.8745
+Epoch 3/50
+ - 868s - loss: 0.2274 - acc: 0.9169 - val_loss: 0.3059 - val_acc: 0.8810
+Epoch 4/50
+ - 865s - loss: 0.2170 - acc: 0.9203 - val_loss: 0.2992 - val_acc: 0.8823
+Epoch 5/50
+ - 862s - loss: 0.2090 - acc: 0.9241 - val_loss: 0.2991 - val_acc: 0.8853
+Epoch 6/50
+ - 798s - loss: 0.2022 - acc: 0.9264 - val_loss: 0.2981 - val_acc: 0.8849
+Epoch 7/50
+ - 771s - loss: 0.1970 - acc: 0.9292 - val_loss: 0.3036 - val_acc: 0.8847
+Epoch 8/50
+ - 819s - loss: 0.1909 - acc: 0.9316 - val_loss: 0.3308 - val_acc: 0.8671
+Epoch 9/50
+ - 861s - loss: 0.1866 - acc: 0.9337 - val_loss: 0.2990 - val_acc: 0.8799
+Epoch 10/50
+ - 838s - loss: 0.1815 - acc: 0.9357 - val_loss: 0.3091 - val_acc: 0.8816
+Epoch 11/50
+ - 757s - loss: 0.1765 - acc: 0.9383 - val_loss: 0.3087 - val_acc: 0.8777
+Epoch 12/50
+ - 761s - loss: 0.1713 - acc: 0.9394 - val_loss: 0.3114 - val_acc: 0.8775
+Epoch 13/50
+ - 758s - loss: 0.1695 - acc: 0.9399 - val_loss: 0.3310 - val_acc: 0.8737
+Epoch 14/50
+ - 761s - loss: 0.1655 - acc: 0.9412 - val_loss: 0.3447 - val_acc: 0.8606
+Epoch 15/50
+ - 763s - loss: 0.1626 - acc: 0.9422 - val_loss: 0.3172 - val_acc: 0.8757
+Epoch 16/50
+ - 758s - loss: 0.1596 - acc: 0.9429 - val_loss: 0.3324 - val_acc: 0.8802
+Epoch 17/50
+ - 759s - loss: 0.1582 - acc: 0.9447 - val_loss: 0.3460 - val_acc: 0.8641
+Epoch 18/50
+ - 760s - loss: 0.1546 - acc: 0.9459 - val_loss: 0.3309 - val_acc: 0.8767
+Epoch 19/50
+ - 756s - loss: 0.1534 - acc: 0.9458 - val_loss: 0.3320 - val_acc: 0.8781
+Epoch 20/50
+ - 757s - loss: 0.1502 - acc: 0.9476 - val_loss: 0.3360 - val_acc: 0.8666
+Epoch 21/50
+ - 759s - loss: 0.1495 - acc: 0.9478 - val_loss: 0.3383 - val_acc: 0.8780
+Epoch 22/50
+ - 756s - loss: 0.1482 - acc: 0.9477 - val_loss: 0.3541 - val_acc: 0.8637
+Epoch 23/50
+ - 835s - loss: 0.1474 - acc: 0.9478 - val_loss: 0.3322 - val_acc: 0.8738
+Epoch 24/50
+ - 864s - loss: 0.1471 - acc: 0.9482 - val_loss: 0.3440 - val_acc: 0.8727
+Epoch 25/50
+ - 863s - loss: 0.1455 - acc: 0.9479 - val_loss: 0.3622 - val_acc: 0.8652
+Epoch 26/50
+ - 861s - loss: 0.1442 - acc: 0.9497 - val_loss: 0.3579 - val_acc: 0.8773
+Epoch 27/50
+ - 859s - loss: 0.1431 - acc: 0.9502 - val_loss: 0.3313 - val_acc: 0.8737
+Epoch 28/50
+ - 859s - loss: 0.1424 - acc: 0.9501 - val_loss: 0.3457 - val_acc: 0.8769
+Epoch 29/50
+ - 861s - loss: 0.1405 - acc: 0.9501 - val_loss: 0.3293 - val_acc: 0.8791
+Epoch 30/50
+ - 860s - loss: 0.1417 - acc: 0.9499 - val_loss: 0.3407 - val_acc: 0.8689
+Epoch 31/50
+ - 862s - loss: 0.1391 - acc: 0.9503 - val_loss: 0.3635 - val_acc: 0.8696
+Epoch 32/50
+ - 860s - loss: 0.1407 - acc: 0.9496 - val_loss: 0.3540 - val_acc: 0.8696
+Epoch 33/50
+ - 863s - loss: 0.1390 - acc: 0.9509 - val_loss: 0.3390 - val_acc: 0.8684
+Epoch 34/50
+ - 857s - loss: 0.1382 - acc: 0.9509 - val_loss: 0.3454 - val_acc: 0.8778
+Epoch 35/50
+ - 859s - loss: 0.1369 - acc: 0.9521 - val_loss: 0.3520 - val_acc: 0.8705
+Epoch 36/50
+ - 858s - loss: 0.1407 - acc: 0.9506 - val_loss: 0.3471 - val_acc: 0.8675
+Epoch 37/50
+ - 858s - loss: 0.1388 - acc: 0.9511 - val_loss: 0.3606 - val_acc: 0.8725
+Epoch 38/50
+ - 855s - loss: 0.1380 - acc: 0.9511 - val_loss: 0.3505 - val_acc: 0.8606
+Epoch 39/50
+ - 864s - loss: 0.1373 - acc: 0.9515 - val_loss: 0.3584 - val_acc: 0.8649
+Epoch 40/50
+ - 862s - loss: 0.1380 - acc: 0.9506 - val_loss: 0.3545 - val_acc: 0.8690
+Epoch 41/50
+ - 864s - loss: 0.1390 - acc: 0.9499 - val_loss: 0.3660 - val_acc: 0.8674
+Epoch 42/50
+ - 863s - loss: 0.1376 - acc: 0.9519 - val_loss: 0.3382 - val_acc: 0.8758
+Epoch 43/50
+ - 861s - loss: 0.1368 - acc: 0.9520 - val_loss: 0.3604 - val_acc: 0.8645
+Epoch 44/50
+ - 861s - loss: 0.1373 - acc: 0.9522 - val_loss: 0.3742 - val_acc: 0.8699
+Epoch 45/50
+ - 859s - loss: 0.1357 - acc: 0.9528 - val_loss: 0.3242 - val_acc: 0.8724
+Epoch 46/50
+ - 861s - loss: 0.1381 - acc: 0.9509 - val_loss: 0.3680 - val_acc: 0.8710
+Epoch 47/50
+ - 861s - loss: 0.1379 - acc: 0.9505 - val_loss: 0.3790 - val_acc: 0.8680
+Epoch 48/50
+ - 860s - loss: 0.1395 - acc: 0.9511 - val_loss: 0.3551 - val_acc: 0.8715
+Epoch 49/50
+ - 859s - loss: 0.1380 - acc: 0.9519 - val_loss: 0.3560 - val_acc: 0.8702
+Epoch 50/50
+ - 859s - loss: 0.1370 - acc: 0.9508 - val_loss: 0.3814 - val_acc: 0.8644
+Saving model to disk 
+

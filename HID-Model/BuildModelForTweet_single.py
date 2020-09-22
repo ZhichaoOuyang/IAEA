@@ -17,10 +17,10 @@ EMBEDDING_DIM is an int value for dimention of word embedding look at data_helpe
 '''
 
 
-def Max_layer(tensor):
-    def max(tensor):
-        return keras.backend.max(tensor, axis=1)
-    return Lambda(max)(tensor)
+def Mean_layer(tensor):
+    def mean(tensor):
+        return keras.backend.mean(tensor, axis=1)
+    return Lambda(mean)(tensor)
 
 def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, EMBEDDING_DIM):
     # construct model
@@ -40,7 +40,7 @@ def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, 
                                     mask_zero=True)(x1_input)
     gru_out_x1 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(embedded_x1)
     sent_gru_out_x1 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(gru_out_x1)   # 多层gru  batch_size,50,100
-    sent_gru_out_x1 = Max_layer(sent_gru_out_x1)
+    sent_gru_out_x1 = Mean_layer(sent_gru_out_x1)
     # print(sent_gru_out_x1)
     sent_feat_x1 = layers.Dense(200, activation='tanh')(sent_gru_out_x1)
     sent_feat_x1 = layers.Dropout(rate=0.2)(sent_feat_x1)
@@ -54,7 +54,7 @@ def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, 
                                     mask_zero=True)(x2_input)
     gru_out_x2 =Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(embedded_x2)  # 多层gru
     sent_gru_out_x2 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(gru_out_x2)
-    sent_gru_out_x2 = Max_layer(sent_gru_out_x2)
+    sent_gru_out_x2 = Mean_layer(sent_gru_out_x2)
     # print(sent_gru_out_x2)
     sent_feat_x2 = layers.Dense(200, activation='tanh')(sent_gru_out_x2)
     sent_feat_x2 = layers.Dropout(rate=0.2)(sent_feat_x2)

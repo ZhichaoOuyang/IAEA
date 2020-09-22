@@ -1,0 +1,324 @@
+nohup: ignoring input
+Using TensorFlow backend.
+Glove/glove.twitter.27B.100d.txt
+Total 1193514 word vectors.
+Loading Data is Done
+(83036, 50)
+(83036, 50)
+(20760, 50)
+(20760, 50)
+Create model of RNN
+WARNING:tensorflow:From /home/chaotf/.local/lib/python3.7/site-packages/tensorflow/python/ops/resource_variable_ops.py:435: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Colocations handled automatically by placer.
+2020-08-06 20:28:45.562687: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-08-06 20:28:45.592830: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2500010000 Hz
+2020-08-06 20:28:45.596461: I tensorflow/compiler/xla/service/service.cc:150] XLA service 0x55936aec1230 executing computations on platform Host. Devices:
+2020-08-06 20:28:45.596503: I tensorflow/compiler/xla/service/service.cc:158]   StreamExecutor device (0): <undefined>, <undefined>
+2020-08-06 20:28:47.628165: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1433] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:83:00.0
+totalMemory: 10.73GiB freeMemory: 10.57GiB
+2020-08-06 20:28:47.628213: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1512] Adding visible gpu devices: 0
+2020-08-06 20:28:47.629442: I tensorflow/core/common_runtime/gpu/gpu_device.cc:984] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-08-06 20:28:47.629462: I tensorflow/core/common_runtime/gpu/gpu_device.cc:990]      0 
+2020-08-06 20:28:47.629470: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1003] 0:   N 
+2020-08-06 20:28:47.630021: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10284 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:83:00.0, compute capability: 7.5)
+2020-08-06 20:28:47.632407: I tensorflow/compiler/xla/service/service.cc:150] XLA service 0x55936a0cc930 executing computations on platform CUDA. Devices:
+2020-08-06 20:28:47.632429: I tensorflow/compiler/xla/service/service.cc:158]   StreamExecutor device (0): GeForce RTX 2080 Ti, Compute Capability 7.5
+class: 2
+Model: "model_1"
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+x1_input (InputLayer)           (None, 50)           0                                            
+__________________________________________________________________________________________________
+x2_input (InputLayer)           (None, 50)           0                                            
+__________________________________________________________________________________________________
+embedding_1 (Embedding)         (None, 50, 100)      6078700     x1_input[0][0]                   
+__________________________________________________________________________________________________
+embedding_2 (Embedding)         (None, 50, 100)      6078700     x2_input[0][0]                   
+__________________________________________________________________________________________________
+bidirectional_1 (Bidirectional) (None, 50, 200)      120600      embedding_1[0][0]                
+__________________________________________________________________________________________________
+bidirectional_3 (Bidirectional) (None, 50, 200)      120600      embedding_2[0][0]                
+__________________________________________________________________________________________________
+bidirectional_2 (Bidirectional) (None, 50, 200)      180600      bidirectional_1[0][0]            
+__________________________________________________________________________________________________
+bidirectional_4 (Bidirectional) (None, 50, 200)      180600      bidirectional_3[0][0]            
+__________________________________________________________________________________________________
+lambda_1 (Lambda)               (None, 200)          0           bidirectional_2[0][0]            
+__________________________________________________________________________________________________
+lambda_2 (Lambda)               (None, 200)          0           bidirectional_4[0][0]            
+__________________________________________________________________________________________________
+dense_1 (Dense)                 (None, 200)          40200       lambda_1[0][0]                   
+__________________________________________________________________________________________________
+dense_2 (Dense)                 (None, 200)          40200       lambda_2[0][0]                   
+__________________________________________________________________________________________________
+dropout_1 (Dropout)             (None, 200)          0           dense_1[0][0]                    
+__________________________________________________________________________________________________
+dropout_2 (Dropout)             (None, 200)          0           dense_2[0][0]                    
+__________________________________________________________________________________________________
+subtract_1 (Subtract)           (None, 200)          0           dropout_1[0][0]                  
+                                                                 dropout_2[0][0]                  
+__________________________________________________________________________________________________
+dense_3 (Dense)                 (None, 1)            201         subtract_1[0][0]                 
+==================================================================================================
+Total params: 12,840,401
+Trainable params: 683,001
+Non-trainable params: 12,157,400
+__________________________________________________________________________________________________
+WARNING:tensorflow:From /home/chaotf/.local/lib/python3.7/site-packages/tensorflow/python/ops/math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.cast instead.
+Train on 83036 samples, validate on 20760 samples
+Epoch 1/50
+2020-08-06 20:28:59.530625: I tensorflow/stream_executor/dso_loader.cc:152] successfully opened CUDA library libcublas.so.10.0 locally
+ - 735s - loss: 0.3705 - acc: 0.8334 - val_loss: 0.3894 - val_acc: 0.8250
+Epoch 2/50
+ - 732s - loss: 0.3150 - acc: 0.8633 - val_loss: 0.3842 - val_acc: 0.8298
+Epoch 3/50
+ - 733s - loss: 0.3014 - acc: 0.8696 - val_loss: 0.3913 - val_acc: 0.8252
+Epoch 4/50
+ - 728s - loss: 0.2917 - acc: 0.8753 - val_loss: 0.4095 - val_acc: 0.8079
+Epoch 5/50
+ - 727s - loss: 0.2848 - acc: 0.8791 - val_loss: 0.4068 - val_acc: 0.8249
+Epoch 6/50
+ - 726s - loss: 0.2775 - acc: 0.8834 - val_loss: 0.3969 - val_acc: 0.8319
+Epoch 7/50
+ - 717s - loss: 0.2717 - acc: 0.8868 - val_loss: 0.3885 - val_acc: 0.8320
+Epoch 8/50
+ - 726s - loss: 0.2639 - acc: 0.8900 - val_loss: 0.3849 - val_acc: 0.8321
+Epoch 9/50
+ - 727s - loss: 0.2592 - acc: 0.8915 - val_loss: 0.4066 - val_acc: 0.8261
+Epoch 10/50
+ - 710s - loss: 0.2550 - acc: 0.8943 - val_loss: 0.4009 - val_acc: 0.8293
+Epoch 11/50
+ - 671s - loss: 0.2499 - acc: 0.8975 - val_loss: 0.4033 - val_acc: 0.8253
+Epoch 12/50
+ - 701s - loss: 0.2439 - acc: 0.8991 - val_loss: 0.4120 - val_acc: 0.8290
+Epoch 13/50
+ - 674s - loss: 0.2416 - acc: 0.9000 - val_loss: 0.4163 - val_acc: 0.8293
+Epoch 14/50
+ - 692s - loss: 0.2377 - acc: 0.9035 - val_loss: 0.4374 - val_acc: 0.8278
+Epoch 15/50
+ - 731s - loss: 0.2339 - acc: 0.9046 - val_loss: 0.4601 - val_acc: 0.8284
+Epoch 16/50
+ - 684s - loss: 0.2308 - acc: 0.9062 - val_loss: 0.4492 - val_acc: 0.8281
+Epoch 17/50
+ - 683s - loss: 0.2303 - acc: 0.9061 - val_loss: 0.4212 - val_acc: 0.8282
+Epoch 18/50
+ - 731s - loss: 0.2263 - acc: 0.9081 - val_loss: 0.4199 - val_acc: 0.8297
+Epoch 19/50
+ - 731s - loss: 0.2254 - acc: 0.9088 - val_loss: 0.4458 - val_acc: 0.8274
+Epoch 20/50
+ - 732s - loss: 0.2220 - acc: 0.9099 - val_loss: 0.4326 - val_acc: 0.8280
+Epoch 21/50
+ - 732s - loss: 0.2203 - acc: 0.9117 - val_loss: 0.4405 - val_acc: 0.8249
+Epoch 22/50
+ - 732s - loss: 0.2190 - acc: 0.9116 - val_loss: 0.4388 - val_acc: 0.8291
+Epoch 23/50
+ - 733s - loss: 0.2182 - acc: 0.9124 - val_loss: 0.4313 - val_acc: 0.8225
+Epoch 24/50
+ - 732s - loss: 0.2148 - acc: 0.9145 - val_loss: 0.4363 - val_acc: 0.8298
+Epoch 25/50
+ - 732s - loss: 0.2157 - acc: 0.9132 - val_loss: 0.4359 - val_acc: 0.8267
+Epoch 26/50
+ - 731s - loss: 0.2167 - acc: 0.9137 - val_loss: 0.4563 - val_acc: 0.8294
+Epoch 27/50
+ - 732s - loss: 0.2131 - acc: 0.9150 - val_loss: 0.4694 - val_acc: 0.8295
+Epoch 28/50
+ - 734s - loss: 0.2120 - acc: 0.9153 - val_loss: 0.4487 - val_acc: 0.8274
+Epoch 29/50
+ - 730s - loss: 0.2128 - acc: 0.9140 - val_loss: 0.4425 - val_acc: 0.8294
+Epoch 30/50
+ - 734s - loss: 0.2103 - acc: 0.9155 - val_loss: 0.5058 - val_acc: 0.8288
+Epoch 31/50
+ - 731s - loss: 0.2114 - acc: 0.9148 - val_loss: 0.4443 - val_acc: 0.8310
+Epoch 32/50
+ - 732s - loss: 0.2107 - acc: 0.9145 - val_loss: 0.4801 - val_acc: 0.8288
+Epoch 33/50
+ - 731s - loss: 0.2103 - acc: 0.9156 - val_loss: 0.4273 - val_acc: 0.8302
+Epoch 34/50
+ - 733s - loss: 0.2100 - acc: 0.9152 - val_loss: 0.4828 - val_acc: 0.8319
+Epoch 35/50
+ - 735s - loss: 0.2092 - acc: 0.9162 - val_loss: 0.5070 - val_acc: 0.8332
+Epoch 36/50
+ - 735s - loss: 0.2074 - acc: 0.9174 - val_loss: 0.4455 - val_acc: 0.8292
+Epoch 37/50
+ - 732s - loss: 0.2093 - acc: 0.9164 - val_loss: 0.4592 - val_acc: 0.8308
+Epoch 38/50
+ - 730s - loss: 0.2057 - acc: 0.9180 - val_loss: 0.4621 - val_acc: 0.8288
+Epoch 39/50
+ - 730s - loss: 0.2102 - acc: 0.9166 - val_loss: 0.4594 - val_acc: 0.8301
+Epoch 40/50
+ - 731s - loss: 0.2073 - acc: 0.9182 - val_loss: 0.4398 - val_acc: 0.8325
+Epoch 41/50
+ - 731s - loss: 0.2090 - acc: 0.9161 - val_loss: 0.4366 - val_acc: 0.8284
+Epoch 42/50
+ - 734s - loss: 0.2114 - acc: 0.9146 - val_loss: 0.4267 - val_acc: 0.8297
+Epoch 43/50
+ - 732s - loss: 0.2090 - acc: 0.9170 - val_loss: 0.4718 - val_acc: 0.8326
+Epoch 44/50
+ - 733s - loss: 0.2079 - acc: 0.9166 - val_loss: 0.4254 - val_acc: 0.8316
+Epoch 45/50
+ - 733s - loss: 0.2104 - acc: 0.9155 - val_loss: 0.4515 - val_acc: 0.8338
+Epoch 46/50
+ - 730s - loss: 0.2100 - acc: 0.9156 - val_loss: 0.4516 - val_acc: 0.8302
+Epoch 47/50
+ - 733s - loss: 0.2105 - acc: 0.9151 - val_loss: 0.4715 - val_acc: 0.8294
+Epoch 48/50
+ - 732s - loss: 0.2110 - acc: 0.9161 - val_loss: 0.4401 - val_acc: 0.8276
+Epoch 49/50
+ - 733s - loss: 0.2128 - acc: 0.9156 - val_loss: 0.4655 - val_acc: 0.8309
+Epoch 50/50
+ - 731s - loss: 0.2116 - acc: 0.9160 - val_loss: 0.4671 - val_acc: 0.8287
+save embedding layer model success
+Saving model to disk 
+
+Create Sub model of  1
+class: 2
+Model: "model_4"
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+x1_input (InputLayer)           (None, 50)           0                                            
+__________________________________________________________________________________________________
+x2_input (InputLayer)           (None, 50)           0                                            
+__________________________________________________________________________________________________
+embedding_1 (Embedding)         (None, 50, 100)      6078700     x1_input[0][0]                   
+__________________________________________________________________________________________________
+embedding_2 (Embedding)         (None, 50, 100)      6078700     x2_input[0][0]                   
+__________________________________________________________________________________________________
+bidirectional_1 (Bidirectional) (None, 50, 200)      120600      embedding_1[0][0]                
+__________________________________________________________________________________________________
+bidirectional_3 (Bidirectional) (None, 50, 200)      120600      embedding_2[0][0]                
+__________________________________________________________________________________________________
+bidirectional_2 (Bidirectional) (None, 50, 200)      180600      bidirectional_1[0][0]            
+__________________________________________________________________________________________________
+bidirectional_4 (Bidirectional) (None, 50, 200)      180600      bidirectional_3[0][0]            
+__________________________________________________________________________________________________
+lambda_1 (Lambda)               (None, 200)          0           bidirectional_2[0][0]            
+__________________________________________________________________________________________________
+lambda_2 (Lambda)               (None, 200)          0           bidirectional_4[0][0]            
+__________________________________________________________________________________________________
+dense_4 (Dense)                 (None, 200)          40200       lambda_1[0][0]                   
+__________________________________________________________________________________________________
+dense_5 (Dense)                 (None, 200)          40200       lambda_2[0][0]                   
+__________________________________________________________________________________________________
+dropout_3 (Dropout)             (None, 200)          0           dense_4[0][0]                    
+__________________________________________________________________________________________________
+dropout_4 (Dropout)             (None, 200)          0           dense_5[0][0]                    
+__________________________________________________________________________________________________
+subtract_2 (Subtract)           (None, 200)          0           dropout_3[0][0]                  
+                                                                 dropout_4[0][0]                  
+__________________________________________________________________________________________________
+dense_6 (Dense)                 (None, 1)            201         subtract_2[0][0]                 
+==================================================================================================
+Total params: 12,840,401
+Trainable params: 80,601
+Non-trainable params: 12,759,800
+__________________________________________________________________________________________________
+Train on 39560 samples, validate on 9849 samples
+Epoch 1/50
+ - 181s - loss: 0.5637 - acc: 0.7317 - val_loss: 0.5301 - val_acc: 0.7455
+Epoch 2/50
+ - 181s - loss: 0.5190 - acc: 0.7535 - val_loss: 0.5139 - val_acc: 0.7611
+Epoch 3/50
+ - 180s - loss: 0.5104 - acc: 0.7602 - val_loss: 0.5233 - val_acc: 0.7551
+Epoch 4/50
+ - 181s - loss: 0.5047 - acc: 0.7634 - val_loss: 0.5123 - val_acc: 0.7594
+Epoch 5/50
+ - 179s - loss: 0.5006 - acc: 0.7667 - val_loss: 0.5192 - val_acc: 0.7540
+Epoch 6/50
+ - 181s - loss: 0.4980 - acc: 0.7674 - val_loss: 0.5115 - val_acc: 0.7578
+Epoch 7/50
+ - 179s - loss: 0.4978 - acc: 0.7687 - val_loss: 0.5148 - val_acc: 0.7624
+Epoch 8/50
+ - 180s - loss: 0.4964 - acc: 0.7681 - val_loss: 0.5023 - val_acc: 0.7643
+Epoch 9/50
+ - 180s - loss: 0.4963 - acc: 0.7674 - val_loss: 0.5057 - val_acc: 0.7660
+Epoch 10/50
+ - 179s - loss: 0.4947 - acc: 0.7693 - val_loss: 0.5155 - val_acc: 0.7522
+Epoch 11/50
+ - 181s - loss: 0.4947 - acc: 0.7694 - val_loss: 0.5037 - val_acc: 0.7664
+Epoch 12/50
+ - 179s - loss: 0.4951 - acc: 0.7678 - val_loss: 0.5004 - val_acc: 0.7685
+Epoch 13/50
+ - 180s - loss: 0.4950 - acc: 0.7676 - val_loss: 0.5004 - val_acc: 0.7665
+Epoch 14/50
+ - 182s - loss: 0.4919 - acc: 0.7719 - val_loss: 0.5008 - val_acc: 0.7674
+Epoch 15/50
+ - 183s - loss: 0.4917 - acc: 0.7712 - val_loss: 0.5007 - val_acc: 0.7671
+Epoch 16/50
+ - 187s - loss: 0.4928 - acc: 0.7692 - val_loss: 0.5062 - val_acc: 0.7651
+Epoch 17/50
+ - 187s - loss: 0.4934 - acc: 0.7692 - val_loss: 0.5005 - val_acc: 0.7648
+Epoch 18/50
+ - 188s - loss: 0.4916 - acc: 0.7698 - val_loss: 0.5030 - val_acc: 0.7611
+Epoch 19/50
+ - 187s - loss: 0.4920 - acc: 0.7704 - val_loss: 0.4979 - val_acc: 0.7724
+Epoch 20/50
+ - 188s - loss: 0.4904 - acc: 0.7702 - val_loss: 0.4997 - val_acc: 0.7630
+Epoch 21/50
+ - 187s - loss: 0.4905 - acc: 0.7707 - val_loss: 0.5039 - val_acc: 0.7687
+Epoch 22/50
+ - 188s - loss: 0.4906 - acc: 0.7719 - val_loss: 0.5011 - val_acc: 0.7674
+Epoch 23/50
+ - 187s - loss: 0.4909 - acc: 0.7708 - val_loss: 0.5008 - val_acc: 0.7662
+Epoch 24/50
+ - 188s - loss: 0.4926 - acc: 0.7690 - val_loss: 0.5035 - val_acc: 0.7653
+Epoch 25/50
+ - 188s - loss: 0.4910 - acc: 0.7712 - val_loss: 0.5093 - val_acc: 0.7608
+Epoch 26/50
+ - 188s - loss: 0.4899 - acc: 0.7718 - val_loss: 0.5029 - val_acc: 0.7623
+Epoch 27/50
+ - 188s - loss: 0.4895 - acc: 0.7722 - val_loss: 0.4965 - val_acc: 0.7709
+Epoch 28/50
+ - 187s - loss: 0.4893 - acc: 0.7725 - val_loss: 0.4997 - val_acc: 0.7668
+Epoch 29/50
+ - 187s - loss: 0.4897 - acc: 0.7698 - val_loss: 0.4982 - val_acc: 0.7702
+Epoch 30/50
+ - 188s - loss: 0.4900 - acc: 0.7712 - val_loss: 0.4979 - val_acc: 0.7656
+Epoch 31/50
+ - 187s - loss: 0.4893 - acc: 0.7721 - val_loss: 0.5065 - val_acc: 0.7736
+Epoch 32/50
+ - 188s - loss: 0.4886 - acc: 0.7734 - val_loss: 0.4982 - val_acc: 0.7700
+Epoch 33/50
+ - 188s - loss: 0.4890 - acc: 0.7718 - val_loss: 0.4978 - val_acc: 0.7708
+Epoch 34/50
+ - 188s - loss: 0.4897 - acc: 0.7715 - val_loss: 0.4979 - val_acc: 0.7638
+Epoch 35/50
+ - 188s - loss: 0.4891 - acc: 0.7710 - val_loss: 0.4955 - val_acc: 0.7711
+Epoch 36/50
+ - 188s - loss: 0.4864 - acc: 0.7745 - val_loss: 0.4946 - val_acc: 0.7707
+Epoch 37/50
+ - 188s - loss: 0.4895 - acc: 0.7734 - val_loss: 0.5032 - val_acc: 0.7610
+Epoch 38/50
+ - 187s - loss: 0.4893 - acc: 0.7712 - val_loss: 0.5010 - val_acc: 0.7648
+Epoch 39/50
+ - 188s - loss: 0.4891 - acc: 0.7724 - val_loss: 0.5012 - val_acc: 0.7638
+Epoch 40/50
+ - 188s - loss: 0.4894 - acc: 0.7727 - val_loss: 0.5009 - val_acc: 0.7705
+Epoch 41/50
+ - 188s - loss: 0.4898 - acc: 0.7716 - val_loss: 0.4975 - val_acc: 0.7709
+Epoch 42/50
+ - 187s - loss: 0.4878 - acc: 0.7743 - val_loss: 0.5025 - val_acc: 0.7684
+Epoch 43/50
+ - 188s - loss: 0.4881 - acc: 0.7726 - val_loss: 0.4989 - val_acc: 0.7725
+Epoch 44/50
+ - 188s - loss: 0.4892 - acc: 0.7714 - val_loss: 0.5002 - val_acc: 0.7665
+Epoch 45/50
+ - 187s - loss: 0.4882 - acc: 0.7722 - val_loss: 0.4994 - val_acc: 0.7684
+Epoch 46/50
+ - 188s - loss: 0.4865 - acc: 0.7749 - val_loss: 0.4960 - val_acc: 0.7699
+Epoch 47/50
+ - 188s - loss: 0.4866 - acc: 0.7726 - val_loss: 0.4970 - val_acc: 0.7712
+Epoch 48/50
+ - 188s - loss: 0.4897 - acc: 0.7704 - val_loss: 0.5047 - val_acc: 0.7621
+Epoch 49/50
+ - 188s - loss: 0.4890 - acc: 0.7731 - val_loss: 0.5001 - val_acc: 0.7687
+Epoch 50/50
+ - 188s - loss: 0.4862 - acc: 0.7754 - val_loss: 0.5036 - val_acc: 0.7608
+Saving model to disk 
+

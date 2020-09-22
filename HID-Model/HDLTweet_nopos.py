@@ -23,15 +23,15 @@ if __name__ == "__main__":
     # os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
     # gpu_options = tf.GPUOptions(allow_growth=True)
     # sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
-    checkpoint1 = ModelCheckpoint(filepath='best_model_1_100_nopos_add_3m29.h5', monitor='val_acc', mode='auto', save_best_only='True')
-    checkpoint2 = ModelCheckpoint(filepath='best_model_22_100_nopos_add_3m29.h5', monitor='val_acc', mode='auto', save_best_only='True')
+    checkpoint1 = ModelCheckpoint(filepath='best_model_1_50_nopos_sub_8m10.h5', monitor='val_acc', mode='auto', save_best_only='True')
+    checkpoint2 = ModelCheckpoint(filepath='best_model_22_50_nopos_sub_8m10.h5', monitor='val_acc', mode='auto', save_best_only='True')
     MEMORY_MB_MAX = 1600000 # maximum memory you can use
     MAX_SEQUENCE_LENGTH = 50 # Maximum sequance lenght 500 words
     MAX_NB_WORDS = 50000 # Maximum number of unique words
     EMBEDDING_DIM = 100 #embedding dimension you can change it to {25, 100, 150, and 300} but need to change glove version
     batch_size_L1 = 64 # batch size in Level 1
     batch_size_L2 = 64 # batch size in Level 2
-    epochs = 20
+    epochs = 50
 
     L1_model =2 # 0 is DNN, 1 is CNN, and 2 is RNN for Level 1
     L2_model =2 # 0 is DNN, 1 is CNN, and 2 is RNN for Level 2
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
         print("save embedding layer model success")
         print("Saving model to disk \n")
-        mp = "model1_100_nopos_add_3m29.h5"
+        mp = "model1_50_nopos_sub_8m10.h5"
         model.save(mp)
 
     # RNN Level 2
@@ -99,7 +99,7 @@ if __name__ == "__main__":
                       batch_size=batch_size_L2,
                       callbacks=callback_lists)
         print("Saving model to disk \n")
-        mp = "model22_100_nopos_add_3m29.h5"
+        mp = "model22_50_nopos_sub_8m10.h5"
         model2.save(mp)
 
 

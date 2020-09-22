@@ -12,7 +12,7 @@ RMDL: Random Multimodel Deep Learning for Classification
 # coding=utf-8
 import os
 os.environ['KERAS_BACKEND'] = 'tensorflow'
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 import numpy as np
 # from keras.models import Sequential
 from keras.models import Model
@@ -32,14 +32,14 @@ if __name__ == "__main__":
     # os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
     # gpu_options = tf.GPUOptions(allow_growth=True)
     # sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
-    checkpoint1 = ModelCheckpoint(filepath='best_model_single_3m29.h5', monitor='val_acc', mode='auto', save_best_only='True')
+    checkpoint1 = ModelCheckpoint(filepath='best_model_single_8m6.h5', monitor='val_acc', mode='auto', save_best_only='True')
     MEMORY_MB_MAX = 1600000 # maximum memory you can use
     MAX_SEQUENCE_LENGTH = 50 # Maximum sequance lenght 500 words
     MAX_NB_WORDS = 50000 # Maximum number of unique words
     EMBEDDING_DIM = 100 #embedding dimension you can change it to {25, 100, 150, and 300} but need to change glove version
     batch_size_L1 = 64 # batch size in Level 1
     batch_size_L2 = 64 # batch size in Level 2
-    epochs = 100
+    epochs = 50
 
     L1_model =2 # 0 is DNN, 1 is CNN, and 2 is RNN for Level 1
     L2_model =2 # 0 is DNN, 1 is CNN, and 2 is RNN for Level 2
@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
     X_train1, X_train2, y_train, X_test1, X_test2, y_test,word_index, embeddings_index,number_of_classes_L1 = \
         Data_helper.loadData_Tokenizer(MAX_NB_WORDS,MAX_SEQUENCE_LENGTH)
-    checkpoint1 = ModelCheckpoint(filepath='best_model_single_nopos.h5', monitor='val_acc', mode='auto', save_best_only='True')
+    checkpoint1 = ModelCheckpoint(filepath='best_model_single_nopos_8m6.h5', monitor='val_acc', mode='auto', save_best_only='True')
     print("Loading Data is Done")
     # RNN Level 1
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
         # embedding2_layer_model.save(mp)
         # print("save embedding layer model success")
         print("Saving model to disk \n")
-        mp = "model_single_nopos_3m29.h5"
+        mp = "model_single_nopos_8m6.h5"
         model.save(mp)
 
 

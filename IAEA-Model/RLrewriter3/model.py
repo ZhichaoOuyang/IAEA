@@ -21,7 +21,7 @@ import time
 import numpy as np
 import tensorflow as tf
 import sys
-sys.path.append(r'/data/chao/unified-summarization-master/RLrewriter3')
+sys.path.append(r'/workspace/data/chao/unified-summarization-master/RLrewriter3')
 from attention_decoder import attention_decoder
 from tensorflow.contrib.tensorboard.plugins import projector
 from nltk.translate.bleu_score import sentence_bleu

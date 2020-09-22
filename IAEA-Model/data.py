@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# encoding=utf8
+
 # Copyright 2016 The TensorFlow Authors. All Rights Reserved.
 # Modifications Copyright 2017 Abigail See
 #
@@ -24,6 +27,10 @@ from tensorflow.core.example import example_pb2
 import operator
 import numpy as np
 import pdb
+import sys
+import importlib
+importlib.reload(sys)
+
 
 # <s> and </s> are used in the data files to segment the abstracts into sentences. They don't receive vocab ids.
 SENTENCE_START = '<s>'
@@ -57,11 +64,11 @@ class Vocab(object):
       self._count += 1
 
     # Read the vocab file and add words up to max_size
-    with open(vocab_file, 'r') as vocab_f:
+    with open(vocab_file, 'r', encoding='utf-8') as vocab_f:
       for line in vocab_f:
         pieces = line.split()
         if len(pieces) != 2:
-          print ('Warning: incorrectly formatted line in vocabulary file: %s\n' % line)
+          # print ('Warning: incorrectly formatted line in vocabulary file: %s\n' % line)
           continue
         w = pieces[0]
         if w in [SENTENCE_START, SENTENCE_END, UNKNOWN_TOKEN, PAD_TOKEN, START_DECODING, STOP_DECODING]:

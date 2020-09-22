@@ -123,5 +123,5 @@ def loadData_Tokenizer(MAX_NB_WORDS,MAX_SEQUENCE_LENGTH):
 
 if __name__ == "__main__":
     MAX_SEQUENCE_LENGTH = 50      # Maximum sequance lenght 500 words
-    MAX_NB_WORDS = 55000     # Maximum number of unique words
+    MAX_NB_WORDS = 50000     # Maximum number of unique words
     loadData_Tokenizer(MAX_NB_WORDS, MAX_SEQUENCE_LENGTH)

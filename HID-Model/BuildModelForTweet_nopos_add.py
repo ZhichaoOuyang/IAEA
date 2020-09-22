@@ -1,11 +1,12 @@
 from keras.models import Sequential
 from keras.models import Model
 import numpy as np
-from keras.layers import Dense, Input, Flatten
+from keras.layers import Dense, Input, Flatten, Lambda
 from keras.layers import Conv1D, MaxPooling1D, Embedding, merge, Dropout, LSTM, GRU, Bidirectional,SimpleRNN
 from keras import layers
 from keras.models import load_model
-
+from keras.backend import max
+import keras
 '''
 def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, EMBEDDING_DIM):
 word_index in word index , 
@@ -14,6 +15,14 @@ nClasses is number of classes,
 MAX_SEQUENCE_LENGTH is maximum lenght of text sequences, 
 EMBEDDING_DIM is an int value for dimention of word embedding look at data_helper.py 
 '''
+
+
+def Mean_layer(tensor):
+    def mean(tensor):
+        return keras.backend.mean(tensor, axis=1)
+    return Lambda(mean)(tensor)
+
+
 def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, EMBEDDING_DIM):
     # construct model
 
@@ -31,7 +40,9 @@ def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, 
                                     trainable=False,
                                     mask_zero=True)(x1_input)
     gru_out_x1 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(embedded_x1)
-    sent_gru_out_x1 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2))(gru_out_x1)   # 多层gru
+    sent_gru_out_x1 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(gru_out_x1)   # 多层gru  batch_size,50,100
+    sent_gru_out_x1 = Mean_layer(sent_gru_out_x1)
+    # print(sent_gru_out_x1)
     sent_feat_x1 = layers.Dense(200, activation='tanh')(sent_gru_out_x1)
     sent_feat_x1 = layers.Dropout(rate=0.2)(sent_feat_x1)
 
@@ -43,13 +54,15 @@ def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, 
                                     trainable=False,
                                     mask_zero=True)(x2_input)
     gru_out_x2 =Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(embedded_x2)  # 多层gru
-    sent_gru_out_x2 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2))(gru_out_x2)
+    sent_gru_out_x2 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(gru_out_x2)
+    sent_gru_out_x2 = Mean_layer(sent_gru_out_x2)
+    # print(sent_gru_out_x2)
     sent_feat_x2 = layers.Dense(200, activation='tanh')(sent_gru_out_x2)
     sent_feat_x2 = layers.Dropout(rate=0.2)(sent_feat_x2)
     merged = layers.add([sent_feat_x1, sent_feat_x2])
     # concatenated = Flatten()(concatenated)
     output = layers.Dense(1, activation='sigmoid')(merged)
-    print("class:" , nClasses)
+    print("class:", nClasses)
     model = Model([x1_input, x2_input], output)
     model.compile(loss='binary_crossentropy',
                   optimizer='rmsprop',
@@ -62,9 +75,9 @@ def buildModel_RNN_layer2(word_index, embeddings_index, nClasses, MAX_SEQUENCE_L
     # construct model
 
 
-    model = load_model('best_model_1_100_nopos_add.h5')
-    model1 = Model(inputs=model.input, outputs=model.get_layer('bidirectional_2').output)
-    model2 = Model(inputs=model.input, outputs=model.get_layer('bidirectional_4').output)
+    model = load_model('best_model_1_50_nopos_add_8m6.h5', custom_objects={'keras': keras})
+    model1 = Model(inputs=model.input, outputs=model.get_layer('lambda_1').output)
+    model2 = Model(inputs=model.input, outputs=model.get_layer('lambda_2').output)
     for layer in model1.layers:
         layer.trainable = False  #原来的不训练
     for layer in model2.layers:

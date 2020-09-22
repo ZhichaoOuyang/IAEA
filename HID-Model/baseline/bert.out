@@ -1,0 +1,25 @@
+nohup: ignoring input
+prepare datasets...
+103796
+103796
+read data cost 170.431334 seconds
+Start training ...
+training cost 64.793750 seconds
+49409
+49409
+read data cost 316.761411 seconds
+Start training ...
+training cost 9.728127 seconds
+Start predicting...
+Traceback (most recent call last):
+  File "Bert_HID_ttest.py", line 93, in <module>
+    test_predict = clf.predict(X_test)
+  File "/opt/anaconda3/lib/python3.7/site-packages/sklearn/linear_model/_base.py", line 293, in predict
+    scores = self.decision_function(X)
+  File "/opt/anaconda3/lib/python3.7/site-packages/sklearn/linear_model/_base.py", line 268, in decision_function
+    X = check_array(X, accept_sparse='csr')
+  File "/opt/anaconda3/lib/python3.7/site-packages/sklearn/utils/validation.py", line 556, in check_array
+    "if it contains a single sample.".format(array))
+ValueError: Expected 2D array, got 1D array instead:
+array=[].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.

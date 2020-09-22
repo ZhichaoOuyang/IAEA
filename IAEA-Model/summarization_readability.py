@@ -1,6 +1,6 @@
 from readability import Readability
 
-path = "E:/chao/nnsummary_our/lingting/mssf_read_output_2"
+path = "/Users/chao/GitHub/TKDD/lr0001/IAEA_output"
 str = ""
 with open(path,encoding="utf-8") as f:
     for line in f.readlines():

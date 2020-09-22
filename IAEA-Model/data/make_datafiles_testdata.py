@@ -31,10 +31,10 @@ SENTENCE_END = '</s>'
 # all_val_urls = "./url_lists/all_val.txt"
 # all_test_urls = "./url_lists/all_test.txt"
 
-tokenized_twitter_dir = "twitter_test_4m6"    # 分词后存的路径
+tokenized_twitter_dir = "twitter_train_8m6"    # 分词后存的路径
 # cnn_tokenized_stories_dir = "cnn_stories_tokenized"
 # dm_tokenized_stories_dir = "dm_stories_tokenized"
-finished_files_dir = "finished_files_twitter_4m6"    # 生成的.bin .pkl文件存放的位置
+finished_files_dir = "finished_files_twitter_8m6"    # 生成的.bin .pkl文件存放的位置
 chunks_dir = os.path.join(finished_files_dir, "chunked")    # 划分后存放的位置
 
 # These are the number of .story files we expect there to be in cnn_stories_dir and dm_stories_dir
@@ -79,7 +79,7 @@ def chunk_all():
         os.mkdir(chunks_dir)
     # Chunk the data
     # for set_name in ['train', 'val', 'test']:
-    for set_name in ['test']:
+    for set_name in ['train']:
         print("Splitting %s data into chunks..." % set_name)
         chunk_file(set_name)
     print("Saved chunked data in %s" % chunks_dir)
@@ -275,6 +275,7 @@ def get_extract_summary(article_sents, abstract_sents):
     extract_sents_num.append(len(extract_sents))
     extract_words = ' '.join(extract_sents).split(' ')
     extract_words_num.append(len(extract_words))
+    print(len(extract_words_num))
     return extract_sents, extract_ids, fscores, precisions, recalls, max_Rouge_l_r
 
 
@@ -370,7 +371,7 @@ def write_to_bin(out_file, makevocab=False):    # 将txt写成.bin的格式
     print(
     'average extract sents num: ', float(sum(extract_sents_num)) / len(extract_sents_num))
     print(
-    'average extract words num: ', float(sum(extract_words_num)) / len(extract_words_num))
+    'average extract words num: ', float(sum(extract_words_num)) / len(extract_words_num), ' extract_words_num:', len(extract_words_num))
     print(
     'average article sents num: ', float(sum(article_sents_num)) / len(article_sents_num))
     split_name = out_file.split('.')[0]
@@ -420,9 +421,9 @@ if __name__ == '__main__':
     tokenize_stories(twitter_dir, tokenized_twitter_dir)   # 得到分词后的txt
 
     # Read the tokenized stories, do a little postprocessing then write to bin files
-    write_to_bin(os.path.join(finished_files_dir, "test.bin"))
+    # write_to_bin(os.path.join(finished_files_dir, "test.bin"))
     # write_to_bin(os.path.join(finished_files_dir, "val.bin"))
-    # write_to_bin(os.path.join(finished_files_dir, "train.bin"), makevocab=True)
+    write_to_bin(os.path.join(finished_files_dir, "train.bin"), makevocab=True)
 
     with open(os.path.join(finished_files_dir, 'extract_info.pkl'), 'wb') as output_file:
         pk.dump(extract_info, output_file)

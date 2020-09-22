@@ -3,7 +3,7 @@ import time
 import tensorflow as tf
 from batcher import Batcher
 import sys
-sys.path.append(r'/data/chao/unified-summarization-master/end2end2')
+sys.path.append(r'/workspace/data/chao/unified-summarization-master/end2end2')
 import beam_search2
 import data
 import pickle as pk
@@ -262,7 +262,7 @@ def rouge_log(results_dict, dir_to_write):
     dir_to_write: the directory where we will write the results to"""
   rouge_results = {}
   log_str = ""
-  for x in ["1","2","3","4","L","", "l"]:
+  for x in ["1", "2", "l"]:
     log_str += "\nROUGE-%s:\n" % x
     for y in ["f_score", "recall", "precision"]:
       key = "rouge_%s_%s" % (x,y)

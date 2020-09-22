@@ -1,0 +1,124 @@
+nohup: ignoring input
+{'E2EBackProp': False,
+ 'ac_training': False,
+ 'adagrad_init_acc': 0.1,
+ 'alpha': 1,
+ 'avoid_trigrams': True,
+ 'batch_size': 5,
+ 'beam_size': 4,
+ 'calculate_true_q': False,
+ 'convert_to_coverage_model': False,
+ 'convert_to_reinforce_model': False,
+ 'cov_loss_wt': 1.0,
+ 'coverage': True,
+ 'data_path': 'data/finished_files_twitter_8m6/chunked/train_*',
+ 'dec_hidden_dim': 256,
+ 'decay_function': 'linear',
+ 'decode_after': 0,
+ 'decode_from': 'train',
+ 'decode_method': '',
+ 'dqn_batch_size': 100,
+ 'dqn_gpu_num': 1,
+ 'dqn_layers': '512,256,128',
+ 'dqn_polyak_averaging': True,
+ 'dqn_pretrain': False,
+ 'dqn_pretrain_steps': 10000,
+ 'dqn_replay_buffer_size': 100000,
+ 'dqn_scheduled_sampling': False,
+ 'dqn_sleep_time': 2,
+ 'dqn_target_update': 10000,
+ 'dropout_rate': 0.5,
+ 'dueling_net': True,
+ 'emb_dim': 100,
+ 'embedding': 'data/Glove/glove.twitter.27B.100d.txt',
+ 'enc_hidden_dim': 256,
+ 'eta': 2.5e-05,
+ 'eval_ckpt_path': '',
+ 'eval_gt_rouge': False,
+ 'eval_method': '',
+ 'exp_name': 'exp_sample',
+ 'fixed_eta': False,
+ 'fixed_sampling_probability': False,
+ 'gamma': 0.99,
+ 'gpu_num': 2,
+ 'greedy_scheduled_sampling': False,
+ 'hard_argmax': True,
+ 'hidden_dim_rewriter': 256,
+ 'hidden_dim_selector': 200,
+ 'inconsistent_loss': True,
+ 'inconsistent_topk': 3,
+ 'intradecoder': True,
+ 'is_training': False,
+ 'k': 1,
+ 'load_best_eval_model': False,
+ 'log_root': 'log_gpu_endlr00005_8m20',
+ 'lr': 0.0005,
+ 'matrix_attention': False,
+ 'max_art_len': 110,
+ 'max_dec_steps': 120,
+ 'max_enc_steps': 800,
+ 'max_grad_norm': 2.0,
+ 'max_select_sent': 20,
+ 'max_sent_len': 50,
+ 'max_train_iter': 10000,
+ 'min_dec_steps': 35,
+ 'min_select_sent': 5,
+ 'mode': 'train',
+ 'model': 'end2end',
+ 'model_max_to_keep': 20,
+ 'pointer_gen': True,
+ 'pretrained_rewriter_path': 'log_rewriter_8m12/rewriter/exp_sample/train/model.ckpt_cov-7000',
+ 'pretrained_selector_path': 'log_gpu_8m6_selector001/selector/exp_sample/train/model.ckpt-500',
+ 'rand_unif_init_mag': 0.02,
+ 'restore_best_model': False,
+ 'reward_function': 'rouge_l/f_score',
+ 'rl_training': True,
+ 'sampling_probability': 0,
+ 'save_model_every': 1000,
+ 'save_pkl': False,
+ 'save_vis': False,
+ 'scheduled_sampling': False,
+ 'scheduled_sampling_final_dist': True,
+ 'select_method': 'prob',
+ 'selector_loss_wt': 5.0,
+ 'self_critic': True,
+ 'share_decoder_weights': False,
+ 'single_pass': False,
+ 'start_eval_rouge': 300,
+ 'thres': 0.4,
+ 'trunc_norm_init_std': 0.0001,
+ 'use_discounted_rewards': False,
+ 'use_intermediate_rewards': False,
+ 'use_temporal_attention': True,
+ 'vocab_path': 'data/finished_files_twitter_8m6/vocab',
+ 'vocab_size': 50000}
+INFO:tensorflow:Starting end2end in train mode...
+max_size of vocab was specified as 50000; we now have 50000 words. Stopping reading.
+Finished constructing vocabulary of 50000 total words. Last word added: asb
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+WARNING:tensorflow:Found an example with empty article text. Skipping it.
+Word Embedding Reading done.
+creating model...
+INFO:tensorflow:Building graph...
+embedding load
+Writing word embedding metadata file to log_gpu_endlr00005_8m20/end2end/exp_sample/train/vocab_metadata.tsv...
+((200, 1), ' ', (1,))
