@@ -1,6 +1,6 @@
 from readability import Readability
 
-path = "/Users/chao/GitHub/TKDD/lr0001/IAEA_output"
+path = "/Users/chao/GitHub/TKDD对比实验/abrandom/IAEAr_output"
 str = ""
 with open(path,encoding="utf-8") as f:
     for line in f.readlines():
