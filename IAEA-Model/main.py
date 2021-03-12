@@ -2,14 +2,14 @@
 # -*- coding:utf-8 -*-
 
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 import tensorflow as tf
 from collections import namedtuple
 import pprint
 import time
-from etractor.model import SentenceSelector
-from etractor.evaluate import SelectorEvaluator
-import etractor.run_selector as run_selector
+from extractor.model import SentenceSelector
+from extractor.evaluate import SelectorEvaluator
+import extractor.run_selector as run_selector
 
 from abstractor.model import Rewriter
 from abstractor.decode import BeamSearchDecoder

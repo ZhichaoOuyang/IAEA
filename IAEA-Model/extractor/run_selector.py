@@ -84,7 +84,7 @@ def run_training(model, batcher, sess_context_manager, sv, summary_writer,
       _ = util.load_ckpt(pretrained_saver, sess, ckpt_path=FLAGS.pretrained_selector_path)
 
     for _ in range(FLAGS.max_train_iter): # repeats until interrupted
-      batch = batcher.next_batch()   # 一个batch 5个文章
+      batch = batcher.next_batch()   #
 
       tf.logging.info('running training step...')
       t0=time.time()
