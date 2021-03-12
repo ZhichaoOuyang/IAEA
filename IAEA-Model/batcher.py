@@ -26,7 +26,7 @@ import data
 import pdb
 
 
-class Example(object):   # 一个文章(timeline)
+class Example(object):   # a timeline
   """Class representing a train/val/test example for text summarization."""
 
   def __init__(self, article_sentences, extract_ids, abstract_sentences, vocab, hps):
@@ -92,19 +92,19 @@ class Example(object):   # 一个文章(timeline)
       # Process the article
       if hps.model == 'selector':
         if len(article_sentences) > hps.max_art_len:
-          article_sentences = article_sentences[:hps.max_art_len]    # 文档里的句子
-        self.art_len = len(article_sentences) # store the length after truncation but before padding   # 存储每个文档有几个句子
+          article_sentences = article_sentences[:hps.max_art_len]    # Sentences in the document
+        self.art_len = len(article_sentences) # store the length after truncation but before padding   # Store a few sentences in each document
       elif hps.model == 'end2end':
         if self.art_len > hps.max_art_len:
           self.art_len = hps.max_art_len
         article_sentences = article_sentences[:self.art_len]
 
-      self.art_ids = []    # 存储每个文章的每个句子的对应的词的id，[[],[],[],[]..] len(art_ids) 最多等于50
-      self.sent_lens = []    # 存储每个句子里面的词有几个
-      for sent in article_sentences:   # 一个article
+      self.art_ids = []    # Store the id of the word corresponding to each sentence of each article, [[],[],[],[]..] len(art_ids) is equal to 50 at most
+      self.sent_lens = []    # How many words are stored in each sentence
+      for sent in article_sentences:   #
         sent = sent.split()
         if len(sent) > hps.max_sent_len:
-          sent = sent[:hps.max_sent_len]   # 截断,
+          sent = sent[:hps.max_sent_len]   # padding
         self.sent_lens.append(len(sent))
         self.art_ids.append([vocab.word2id(w) for w in sent])
 
@@ -151,19 +151,19 @@ class Example(object):   # 一个文章(timeline)
       while len(self.enc_input_sent_ids) < max_len:
         self.enc_input_sent_ids.append(-1)
 
-  def pad_article(self, max_art_len, max_sent_len, pad_id):   # 填充序列
+  def pad_article(self, max_art_len, max_sent_len, pad_id):
     """For selector, pad the article with pad_id up to max_art_len sentences 
        and max_sent_len words for each sentence."""
-    while len(self.art_ids) < max_art_len:    # 文章句子的长度小于50
-      self.art_ids.append([pad_id]*max_sent_len)   # pad的句子都是(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,)
-      self.sent_lens.append(0)   # 当前的artile的句子它的词长度为0
-    assert len(self.art_ids) == max_art_len   #  不满足的话就报错
-    assert len(self.sent_lens) == max_art_len  # 都要等于50
+    while len(self.art_ids) < max_art_len:
+      self.art_ids.append([pad_id]*max_sent_len)
+      self.sent_lens.append(0)
+    assert len(self.art_ids) == max_art_len
+    assert len(self.sent_lens) == max_art_len
     
     for i in range(max_art_len):
       sent_len = len(self.art_ids[i])
       if sent_len < max_sent_len:
-        self.art_ids[i] += [pad_id] * (max_sent_len - sent_len)   # 在不满足序列长度的词补1
+        self.art_ids[i] += [pad_id] * (max_sent_len - sent_len)
         assert len(self.art_ids[i]) == max_sent_len
 
 
@@ -283,26 +283,26 @@ class Batch(object):
 
     # Pad the encoder input sequences up to the length of the longest sequence
     for ex in example_list:
-      ex.pad_article(hps.max_art_len, hps.max_sent_len, self.pad_id)   # pad article   补齐句子和词语
+      ex.pad_article(hps.max_art_len, hps.max_sent_len, self.pad_id)   # pad article
 
     # Initialize the numpy arrays
     # Note: our enc_batch can have different length (second dimension) for each batch because we use dynamic_rnn for the encoder.
     self.art_batch = np.zeros((hps.batch_size, hps.max_art_len, hps.max_sent_len), dtype=np.int32)
     self.art_lens = np.zeros((hps.batch_size), dtype=np.int32)
     self.sent_lens = np.zeros((hps.batch_size, hps.max_art_len), dtype=np.int32)
-    self.art_padding_mask = np.zeros((hps.batch_size, hps.max_art_len), dtype=np.float32)   # 记录哪些句子是pad的
-    self.sent_padding_mask = np.zeros((hps.batch_size, hps.max_art_len, hps.max_sent_len), dtype=np.float32)   # 记录那些词是pad的
+    self.art_padding_mask = np.zeros((hps.batch_size, hps.max_art_len), dtype=np.float32)   #
+    self.sent_padding_mask = np.zeros((hps.batch_size, hps.max_art_len, hps.max_sent_len), dtype=np.float32)   #
 
     # Fill in the numpy arrays
     for i, ex in enumerate(example_list):
-      self.art_batch[i, :, :] = np.array(ex.art_ids)   # 第i个文章 存储每个文章的每个句子的对应的词的id，[[],[],[],[]..] len(art_ids) 最多等于50
-      self.art_lens[i] = ex.art_len  # 这篇文章的长度
-      self.sent_lens[i, :] = np.array(ex.sent_lens)   # 这篇文章句子的每个长度
-      for j in range(ex.art_len):  # 这篇文章有几个句子
-        self.art_padding_mask[i][j] = 1.0   # 有实际句子的设成1
+      self.art_batch[i, :, :] = np.array(ex.art_ids)
+      self.art_lens[i] = ex.art_len
+      self.sent_lens[i, :] = np.array(ex.sent_lens)
+      for j in range(ex.art_len):
+        self.art_padding_mask[i][j] = 1.0
       for j in range(hps.max_art_len):
         for k in range(ex.sent_lens[j]):
-          self.sent_padding_mask[i][j][k] = 1.0   # 有实际的话的设成1
+          self.sent_padding_mask[i][j][k] = 1.0
 
   def init_selector_target(self, example_list, hps):
     """ This function will only be called when hps.model == selector
@@ -310,101 +310,16 @@ class Batch(object):
         self.target_batch:
           numpy array of shape (batch_size, max_art_steps), containing 1s and 0s, padded to max_art_steps length.
     """
-    self.target_batch_selector = np.zeros((hps.batch_size, hps.max_art_len), dtype=np.float32)    # 抽取器里损失函数的ground truth
-    for i, ex in enumerate(example_list):   # 一个example是一个文章
+    self.target_batch_selector = np.zeros((hps.batch_size, hps.max_art_len), dtype=np.float32)
+    for i, ex in enumerate(example_list):
        for idx in ex.original_extract_ids:
          if idx < hps.max_art_len:
            self.target_batch_selector[i][idx] = 1.0
-
-  # Objective Function 的真实分布计算
-  # def init_selector_target_our(self, example_list, hps):
-  #   """ This function will only be called when hps.model == selector
-  #   Initializes the following:
-  #       self.target_batch:
-  #         numpy array of shape (batch_size, max_art_steps), containing 1s and 0s, padded to max_art_steps length.
-  #   """
-  #   self.target_batch_selector = np.zeros((hps.max_art_len.value, hps.batch_size.value, hps.max_art_len.value),
-  #                                         dtype=np.float32)  # 抽取器里损失函数的ground truth
-  #
-  #   for j in range(hps.max_art_len.value):   # 遍历时间
-  #     if j == 0:
-  #       for i, ex in enumerate(example_list):
-
-
-
-    # fscores = []
-    # precisions = []
-    # recalls = []
-    # self.target_batch_selector = np.zeros((hps.max_art_len.value, hps.batch_size.value, hps.max_art_len.value), dtype=np.float32)    # 抽取器里损失函数的ground truth
-    # scores_target = []
-    # id_t = np.zeros((hps.max_art_len.value, hps.batch_size.value), dtype=np.float32)   # 记录前几个时刻，每个批次已经选择好的句子
-    # for j in range(hps.max_art_len.value):  # 在t时间
-    #   extract_ids = []
-    #   extract_sents = []
-    #   if j == 0:
-    #     for i, ex in enumerate(example_list):    # i应该是有5个，因为batch_size = 5 就是5个article
-    #       scores_art = []
-    #
-    #       for idx, art_sent in enumerate(ex.article_sentences):
-    #         rouge_l_f, rouge_l_p, rouge_l_r = my_rouge.rouge_l_summary_level([art_sent], ex.abstract_sents)
-    #         fscores.append(rouge_l_f)
-    #         precisions.append(rouge_l_p)
-    #         recalls.append(rouge_l_r)
-    #       scores = np.array(recalls)
-    #       scores_art.append(scores)    # 得到这篇文章的每句话在这个时间段的得分是多少。
-    #       self.target_batch_selector[j][i] = scores_art
-    #       # 找到当前时间最大的rouge对应的句子的下标 （batch_size）
-    #       sorted_scores = np.sort(scores)[::-1]
-    #       id_sort_by_scores = np.argsort(scores)[::-1]  # 最大的在前面
-    #       id_t[j][i] = (id_sort_by_scores[0])   # t时刻，第i个文章选择的句子的下标
-    #       extract_sents.append(ex.article_sentences[id_sort_by_scores[0]])  # 第一个时间点抽的句子存下来
-    #
-    #     new_extract_ids = sorted(extract_ids + [id_sort_by_scores[i]])
-    #     new_extract_sents = [article_sents[idx] for idx in new_extract_ids]
-    #     _, _, Rouge_l_r = my_rouge.rouge_l_summary_level(new_extract_sents, abstract_sents)
-    #   else:
-    #     for i ,ex in enumerate(example_list):
-    #       scores_art = []
-    #       for idx, art_sent in enumerate(ex.article_sentences):
-    #         if idx in id_t[:,i]:
-    #           rouge_l_r = 0
-    #           recalls.append(rouge_l_r)
-    #         else:
-    #           rouge_l_f, rouge_l_p, rouge_l_r = my_rouge.rouge_l_summary_level([art_sent+], ex.abstract_sents)
-    #           fscores.append(rouge_l_f)
-    #           precisions.append(rouge_l_p)
-    #           recalls.append(rouge_l_r)
-    #
-    #
-    #
-    #       scores = np.array(recalls)
-    #       scores_art.append(scores)    # 得到这篇文章的每句话在这个时间段的得分是多少。
-    #       self.target_batch_selector[j][i] = scores_art
-    #
-    #
-    #
-    #     sorted_scores = np.sort(scores)[::-1]
-    #     id_sort_by_scores = np.argsort(scores)[::-1]
-    #     max_Rouge_l_r = 0.0
-    #     extract_ids = []
-    #     extract_sents = []
-    #
-    #
-    #     for i in range(len(ex.article_sentences)):
-    #       new_extract_ids = sorted(extract_ids + [id_sort_by_scores[i]])
-    #       new_extract_sents = [ex.article_sentences[idx] for idx in new_extract_ids]
-    #       _, _, Rouge_l_r = my_rouge.rouge_l_summary_level(new_extract_sents, ex.abstract_sents)
-    #
-    #       if Rouge_l_r > max_Rouge_l_r:
-    #         extract_ids = new_extract_ids
-    #         extract_sents = new_extract_sents
-    #         max_Rouge_l_r = Rouge_l_r
 
 
 
   def store_orig_strings(self, example_list):
     """Store the original article and abstract strings in the Batch object"""
-    # 是当前examplist的集合，一个batch的结合
     self.original_articles_sents = [ex.original_article_sents for ex in example_list] # list of lists
     self.original_extracts_ids = [ex.original_extract_ids for ex in example_list]
     #self.original_abstracts = [ex.original_abstract for ex in example_list] # list of lists

@@ -30,7 +30,7 @@ def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, 
     for word, i in word_index.items():
         embedding_vector = embeddings_index.get(word)
         if embedding_vector is not None:
-            # words not found in embedding index will be random 0-1之间的浮点数
+            # words not found in embedding index will be random 0-1 float
             embedding_matrix[i] = embedding_vector
     x1_input = Input((MAX_SEQUENCE_LENGTH,), dtype='int32', name='x1_input')
     embedded_x1 = layers.Embedding(input_dim=len(word_index) + 1,
@@ -40,7 +40,7 @@ def buildModel_RNN(word_index, embeddings_index, nClasses, MAX_SEQUENCE_LENGTH, 
                                     trainable=False,
                                     mask_zero=True)(x1_input)
     gru_out_x1 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(embedded_x1)
-    sent_gru_out_x1 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(gru_out_x1)   # 多层gru  batch_size,50,100
+    sent_gru_out_x1 = Bidirectional(GRU(100, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))(gru_out_x1)   # multi layer gru  batch_size,50,100
     sent_gru_out_x1 = Mean_layer(sent_gru_out_x1)
     # print(sent_gru_out_x1)
     sent_feat_x1 = layers.Dense(200, activation='tanh')(sent_gru_out_x1)
@@ -75,11 +75,11 @@ def buildModel_RNN_layer2(word_index, embeddings_index, nClasses, MAX_SEQUENCE_L
     # construct model
 
 
-    model = load_model('best_model_1_50_nopos_sub_8m10.h5', custom_objects={'keras': keras})
+    model = load_model('best_model_1_sub.h5', custom_objects={'keras': keras})
     model1 = Model(inputs=model.input, outputs=model.get_layer('lambda_1').output)
     model2 = Model(inputs=model.input, outputs=model.get_layer('lambda_2').output)
     for layer in model1.layers:
-        layer.trainable = False  #原来的不训练
+        layer.trainable = False
     for layer in model2.layers:
         layer.trainable = False
     output1 = model1.output

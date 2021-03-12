@@ -31,10 +31,10 @@ SENTENCE_END = '</s>'
 # all_val_urls = "./url_lists/all_val.txt"
 # all_test_urls = "./url_lists/all_test.txt"
 
-tokenized_twitter_dir = "twitter_train_8m6"    # 分词后存的路径
+tokenized_twitter_dir = "twitter_train"    # 分词后存的路径
 # cnn_tokenized_stories_dir = "cnn_stories_tokenized"
 # dm_tokenized_stories_dir = "dm_stories_tokenized"
-finished_files_dir = "finished_files_twitter_8m6"    # 生成的.bin .pkl文件存放的位置
+finished_files_dir = "finished_files_twitter"    # 生成的.bin .pkl文件存放的位置
 chunks_dir = os.path.join(finished_files_dir, "chunked")    # 划分后存放的位置
 
 # These are the number of .story files we expect there to be in cnn_stories_dir and dm_stories_dir

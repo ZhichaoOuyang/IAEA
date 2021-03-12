@@ -4,7 +4,6 @@ import nltk
 import re
 import pandas as pd
 def find_lcseque(s1, s2 ,former_sent, current_sent):
-     # 生成字符串长度加1的0矩阵，m用来保存对应位置匹配的结果
     print(s1)
     print(s2)
     # print(former_sent)
@@ -45,27 +44,27 @@ def find_lcseque(s1, s2 ,former_sent, current_sent):
 
     for p1 in range(len(s1)):
         for p2 in range(len(s2)):
-            if s1[p1] == s2[p2]:            #字符匹配成功，则该位置的值为左上方的值加1
+            if s1[p1] == s2[p2]:
                 m[p1+1][p2+1] = m[p1][p2]+1
                 d[p1+1][p2+1] = 'ok'
-            elif m[p1+1][p2] > m[p1][p2+1]:  #左值大于上值，则该位置的值为左值，并标记回溯时的方向
+            elif m[p1+1][p2] > m[p1][p2+1]:
                 m[p1+1][p2+1] = m[p1+1][p2]
                 d[p1+1][p2+1] = 'left'
-            else:                           #上值大于左值，则该位置的值为上值，并标记方向up
+            else:
                 m[p1+1][p2+1] = m[p1][p2+1]
                 d[p1+1][p2+1] = 'up'
     (p1, p2) = (len(s1), len(s2))
     #print (numpy.array(d))
     s = []
-    while m[p1][p2]:    #不为None时
+    while m[p1][p2]:
         c = d[p1][p2]
-        if c == 'ok':   #匹配成功，插入该字符，并向左上角找下一个
+        if c == 'ok':
             s.append(s1[p1-1])
             p1-=1
             p2-=1
-        if c =='left':  #根据标记，向左找下一个
+        if c =='left':
             p2 -= 1
-        if c == 'up':   #根据标记，向上找下一个
+        if c == 'up':
             p1 -= 1
     s.reverse()
     # print((''.join(s)))

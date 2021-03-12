@@ -53,15 +53,15 @@ def text_cleaner(text):
 
 def loadData_Tokenizer(MAX_NB_WORDS,MAX_SEQUENCE_LENGTH):
 
-    fnamek = os.path.join("data/tweet/data/NNL1_train_poslab.txt")
-    fnameL2 = os.path.join("data/tweet/data/NNL2_train_poslab.txt")
+    fnamek = os.path.join("data/HID/data/NNL1_train_poslab.txt")
+    fnameL2 = os.path.join("data/HID/data/NNL2_train_poslab.txt")
     # content1 = []
     # content2 = []
 
-    with open(fnamek) as fk:   # L1 的标签
+    with open(fnamek) as fk:   # L1 label
         contentk = fk.readlines()
         contentk = [x.strip() for x in contentk]
-    with open(fnameL2) as fk:   # L2的标签
+    with open(fnameL2) as fk:   # L2 label
         contentL2 = fk.readlines()
         contentL2 = [x.strip() for x in contentL2]
     Label = np.matrix(contentk, dtype=int)
@@ -72,25 +72,25 @@ def loadData_Tokenizer(MAX_NB_WORDS,MAX_SEQUENCE_LENGTH):
     Label_L2 = np.transpose(Label_L2)
     np.random.seed(7)
 
-    Label = np.column_stack((Label, Label_L2))  # 把L1和L2合成一个矩阵
+    Label = np.column_stack((Label, Label_L2))  # Combine L1 and L2 into a matrix
     # number of classes in Level 2 that is 1D array with size of (number of classes in level one,1)
     number_of_classes_L2 = np.zeros(number_of_classes_L1,dtype=int) #number of classes in Level 2 that is 1D array with size of (number of classes in level one,1)
-    # 打扰数组
+    # shuffle array
 
-    x1 = np.load("NNx1_model_nopos.npy")
-    x2 = np.load("NNx2_model_nopos.npy")
+    x1 = np.load("data/HID/data/NNx1_model_nopos.npy")
+    x2 = np.load("data/HID/data/NNx2_model_nopos.npy")
     x1 = np.matrix(x1, dtype=int)
     x2 = np.matrix(x2, dtype=int)
     x = np.column_stack((x1, x2))
     x = np.array(x)
-    word_index = np.load('word_index_model_nopos.npy').item()
+    word_index = np.load('data/HID/data/word_index_model_nopos.npy').item()
     indices = np.arange(len(x))
     np.random.shuffle(indices)
     x = x[indices]
     Label = Label[indices]
-    #随机划分数据集
+    # Randomly divide the data set
     X_train, X_test, y_train, y_test = train_test_split(x, Label, test_size=0.2, random_state=0)
-    # 这时候X_train还没划分成向量，还是文本
+    # At this time, X_train has not been divided into vectors, it is still text
     X_train1 = []
     X_train2 = []
     X_test1 = []
@@ -164,68 +164,3 @@ def loadData_Tokenizer(MAX_NB_WORDS,MAX_SEQUENCE_LENGTH):
     f.close()
     print('Total %s word vectors.' % len(embeddings_index))
     return (X_train1,X_train2, y_train, X_test1,X_test2, y_test, content1_L2_Train,content2_L2_Train, L2_Train, content1_L2_Test, content2_L2_Test, L2_Test, number_of_classes_L2,word_index,embeddings_index,number_of_classes_L1)
-
-
-
-
-
-# def loadData():
-#     WOS.download_and_extract()
-#     fname = os.path.join(path_WOS,"tweet/WOS5736/X.txt")
-#     fnamek = os.path.join(path_WOS,"tweet/WOS5736/YL1.txt")
-#     fnameL2 = os.path.join(path_WOS,"tweet/WOS5736/YL2.txt")
-#     with open(fname) as f:
-#         content = f.readlines()
-#         content = [text_cleaner(x) for x in content]
-#     with open(fnamek) as fk:
-#         contentk = fk.readlines()
-#     contentk = [x.strip() for x in contentk]
-#     with open(fnameL2) as fk:
-#         contentL2 = fk.readlines()
-#         contentL2 = [x.strip() for x in contentL2]
-#     Label = np.matrix(contentk, dtype=int)
-#     Label = np.transpose(Label)
-#     number_of_classes_L1 = np.max(Label)+1  # number of classes in Level 1
-#
-#     Label_L2 = np.matrix(contentL2, dtype=int)
-#     Label_L2 = np.transpose(Label_L2)
-#     np.random.seed(7)
-#     print(Label.shape)
-#     print(Label_L2.shape)
-#     Label = np.column_stack((Label, Label_L2))
-#
-#     number_of_classes_L2 = np.zeros(number_of_classes_L1,dtype=int)
-#
-#     X_train, X_test, y_train, y_test  = train_test_split(content, Label, test_size=0.2,random_state= 0)
-#
-#     vectorizer_x = CountVectorizer()
-#     X_train = vectorizer_x.fit_transform(X_train).toarray()
-#     X_test = vectorizer_x.transform(X_test).toarray()
-#
-#     L2_Train = []
-#     L2_Test = []
-#     content_L2_Train = []
-#     content_L2_Test = []
-#
-#     for i in range(0, number_of_classes_L1):
-#         L2_Train.append([])
-#         L2_Test.append([])
-#         content_L2_Train.append([])
-#         content_L2_Test.append([])
-#
-#
-#     for i in range(0, X_train.shape[0]):
-#         L2_Train[y_train[i, 0]].append(y_train[i, 1])
-#         number_of_classes_L2[y_train[i, 0]] = max(number_of_classes_L2[y_train[i, 0]],(y_train[i, 1]+1))
-#         content_L2_Train[y_train[i, 0]].append(X_train[i])
-#
-#     for i in range(0, X_test.shape[0]):
-#         L2_Test[y_test[i, 0]].append(y_test[i, 1])
-#         content_L2_Test[y_test[i, 0]].append(X_test[i])
-#
-#     for i in range(0, number_of_classes_L1):
-#         L2_Train[i] = np.array(L2_Train[i])
-#         L2_Test[i] = np.array(L2_Test[i])
-#         content_L2_Train[i] = np.array(content_L2_Train[i])
-#         content_L2_Test[i] = np.array(content_L2_Test[i])
-#     return (X_train,y_train,X_test,y_test,content_L2_Train,L2_Train,content_L2_Test,L2_Test,number_of_classes_L2)

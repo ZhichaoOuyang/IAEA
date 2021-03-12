@@ -38,7 +38,7 @@ def loadData_Tokenizer(MAX_NB_WORDS,MAX_SEQUENCE_LENGTH):
         X_1.append(x.split("ouyang")[0].strip())
         X_2.append(x.split("ouyang")[1].strip())
 
-    # 处理成文本
+    # Process into text
     tokenizer = Tokenizer(num_words=MAX_NB_WORDS)
     # delete "ouyang"
     # dContent = []
@@ -77,14 +77,14 @@ def loadData_Tokenizer(MAX_NB_WORDS,MAX_SEQUENCE_LENGTH):
     pos_content = np.load("tokenizer_content_nopos.npy")
     tokenizer.fit_on_texts(pos_content)
     # np.save("tokenizer_content_layer2test.npy",pos_content)
-    # 转成成向量
+    # Convert to vector
     sequences_train1 = tokenizer.texts_to_sequences(pos_x1)
     sequences_train2 = tokenizer.texts_to_sequences(pos_x2)
 
     word_index = tokenizer.word_index
 
     print('Found %s unique tokens.' % len(word_index))
-    # 填充序列
+    # pad
 
     X_1 = pad_sequences(sequences_train1, maxlen=MAX_SEQUENCE_LENGTH)
     X_2 = pad_sequences(sequences_train2, maxlen=MAX_SEQUENCE_LENGTH)
@@ -96,27 +96,6 @@ def loadData_Tokenizer(MAX_NB_WORDS,MAX_SEQUENCE_LENGTH):
     # b = np.load("x2.npy")
     # np.save("word_index_layer2test.npy",word_index)
     print("save")
-
-    # x1 = np.matrix(a, dtype=int)
-    # x2 = np.matrix(b, dtype=int)
-    # x = np.column_stack((x1, x2))  # 把L1和L2合成一个矩阵
-    # #print(x1.shape)
-    # print(x.shape)
-    # x1 = np.array(x1)
-    # x2 = np.array(x2)
-    # x = np.array(x)
-    # print(x1[0])
-    # print(x2[0])
-    # print(x[0,:MAX_SEQUENCE_LENGTH])
-    # x1 = np.array(x1)
-    # indices = np.arange(len(x1))
-    # np.random.shuffle(indices)
-    # x1 = x1[indices]
-    # print(x1[0])
-    # print('..')
-    # print(len(a[999]))
-    # print('...')
-    # print(b[0])
 
 
 

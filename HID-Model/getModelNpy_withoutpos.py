@@ -20,7 +20,7 @@ def clean_str(string):
 
 def loadData_Tokenizer(MAX_NB_WORDS,MAX_SEQUENCE_LENGTH):
     # nlp = StanfordCoreNLP(r'data/tweet/stanford-corenlp-full-2018-10-05')
-    # trantab = str.maketrans({key: None for key in string.punctuation})  # 删除字符串
+    # trantab = str.maketrans({key: None for key in string.punctuation})
     fname = os.path.join("data/tweet/data/NNModelData.txt")
 
     # content1 = []
@@ -38,7 +38,6 @@ def loadData_Tokenizer(MAX_NB_WORDS,MAX_SEQUENCE_LENGTH):
         X_1.append(x.split("ouyang")[0].strip())
         X_2.append(x.split("ouyang")[1].strip())
 
-    # 处理成文本
     tokenizer = Tokenizer(num_words=MAX_NB_WORDS)
     # delete "ouyang"
     # dContent = []
@@ -74,14 +73,12 @@ def loadData_Tokenizer(MAX_NB_WORDS,MAX_SEQUENCE_LENGTH):
     print("POS end")
     tokenizer.fit_on_texts(pos_content)
     np.save("tokenizer_content_nopos.npy",pos_content)
-    # 转成成向量
     sequences_train1 = tokenizer.texts_to_sequences(pos_x1)
     sequences_train2 = tokenizer.texts_to_sequences(pos_x2)
 
     word_index = tokenizer.word_index
 
     print('Found %s unique tokens.' % len(word_index))
-    # 填充序列
 
     X_1 = pad_sequences(sequences_train1, maxlen=MAX_SEQUENCE_LENGTH)
     X_2 = pad_sequences(sequences_train2, maxlen=MAX_SEQUENCE_LENGTH)

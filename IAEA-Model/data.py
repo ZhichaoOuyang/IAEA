@@ -75,7 +75,7 @@ class Vocab(object):
           raise Exception('<s>, </s>, [UNK], [PAD], [START] and [STOP] shouldn\'t be in the vocab file, but %s is' % w)
         if w in self._word_to_id:
           raise Exception('Duplicated word in vocabulary file: %s' % w)
-        self._word_to_id[w] = self._count     # 频率越大的词 它的id越小了
+        self._word_to_id[w] = self._count     # A word with a higher frequency has a smaller id
         self._id_to_word[self._count] = w
         self._count += 1
         if max_size != 0 and self._count >= max_size:
@@ -171,7 +171,7 @@ def example_generator(data_path, single_pass):
       filelist = sorted(filelist)
     else:
       random.shuffle(filelist)
-    for f in filelist:   # 很多个train_*
+    for f in filelist:   # many train_*
       reader = open(f, 'rb')
       while True:
         len_bytes = reader.read(8)
