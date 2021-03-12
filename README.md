@@ -79,7 +79,7 @@ python main.py --model=rewriter --mode=train --data_path=data/finished_files_twi
  ```
 
 
-### end2end
+### End2End
 - Train
  ```shell script
  python main.py --model=end2end --mode=train --data_path=data/finished_files_twitter/chunked/train_* --vocab_path=data/finished_files_twitter/vocab --log_root=log_gpu_endlr0001 --exp_name=exp_sample --max_enc_steps=800 --max_dec_steps=120 --max_train_iter=10000 --batch_size=5 --use_temporal_attention=True --intradecoder=True --eta=2.5E-05 --max_art_len=110 --max_sent_len=50 --selector_loss_wt=5.0 --inconsistent_loss=True --inconsistent_topk=3 --save_model_every=1000 --model_max_to_keep=20 --rl_training=True --coverage=True --pretrained_selector_path=log_gpu_selector_lr001/selector/exp_sample/train/model.ckpt-500 --pretrained_rewriter_path=log_rewriter/rewriter/exp_sample/train/model.ckpt_cov-7000 --lr=0.001
@@ -89,3 +89,6 @@ python main.py --model=rewriter --mode=train --data_path=data/finished_files_twi
  ```shell script
 python main.py --model=end2end --mode=evalall --data_path=data/finished_files_twitter/chunked/test_* --vocab_path=data/finished_files_twitter/vocab --log_root=log_gpu_endlr0001 --exp_name=exp_sample --max_enc_steps=800 --max_dec_steps=120 --use_temporal_attention=True --intradecoder=True --eta=2.5E-05 --max_art_len=110 --max_sent_len=50 --decode_method=beam --coverage=True --single_pass=1 --save_pkl=True --save_vis=False --inconsistent_loss=True --inconsistent_topk=3 --eval_method=loss --load_best_eval_model=False --coverage=True --rl_training=True --eval_ckpt_path=log_gpu_endlr0001/end2end/exp_sample/train/model.ckpt_cov-10000
  ```
+
+## Aknowledgement
+The code of IAEA-Model is modified on the basis of [unified-summarization](https://github.com/HsuWanTing/unified-summarization) and [RLSeq2Seq](https://github.com/yaserkl/RLSeq2Seq).
