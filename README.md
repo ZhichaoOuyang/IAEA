@@ -58,17 +58,18 @@ python main.py --model=selector --mode=train --data_path=data/IAEA/finished_file
 ### Abstractor
  - Train
  ```shell script
-python main.py --model=rewriter --mode=train --data_path=data/IAEA/finished_files_twitter/chunked/train_* --vocab_path=data/IAEA/finished_files_twitter/vocab --log_root=log_rewriter --exp_name=exp_sample --max_enc_steps=400 --max_dec_steps=100 --batch_size=5 --max_train_iter=5000 --save_model_every=1000 --model_max_to_keep=5
+python main.py --model=rewriter --mode=train --data_path=data/IAEA/finished_files_twitter/chunked/train_* --vocab_path=data/IAEA/finished_files_twitter/vocab --log_root=log_rewriter --exp_name=exp_sample --max_enc_steps=400 --max_dec_steps=100 --batch_size=5 --max_train_iter=5000 --save_model_every=1000 --model_max_to_keep=10 --use_temporal_attention=True --intradecoder=True --rl_training=False
  ```
 
  - Add reinforcement learning
  ```shell script
- python main.py --model=rewriter --mode=train --data_path=data/IAEA/finished_files_twitter/chunked/train_* --vocab_path=data/IAEA/finished_files_twitter/vocab --log_root=log_rewriter --exp_name=exp_sample --batch_size=5 --max_train_iter=1000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True  --convert_to_reinforce_model=True --max_enc_steps=400 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10
+ python main.py --model=rewriter --mode=train --data_path=data/IAEA/finished_files_twitter/chunked/train_* --vocab_path=data/IAEA/finished_files_twitter/vocab --log_root=log_rewriter --exp_name=exp_sample --batch_size=5 --max_train_iter=1000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True --convert_to_reinforce_model=True --max_enc_steps=400 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10
  ```
 
  ```shell script
  python main.py --model=rewriter --mode=train --data_path=data/IAEA/finished_files_twitter/chunked/train_* --vocab_path=data/IAEA/finished_files_twitter/vocab --log_root=log_rewriter --exp_name=exp_sample --batch_size=5 --max_train_iter=1000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True --max_enc_steps=400 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10
  ```
+ 
  - Add coverage mechanism
  ```shell script
  python main.py  --model=rewriter --mode=train --data_path=data/IAEA/finished_files_twitter/chunked/train_* --vocab_path=data/IAEA/finished_files_twitter/vocab --log_root=log_rewriter --exp_name=exp_sample --batch_size=5 --max_train_iter=1000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True --max_enc_steps=400 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10 --coverage=True --convert_to_coverage_model=True
