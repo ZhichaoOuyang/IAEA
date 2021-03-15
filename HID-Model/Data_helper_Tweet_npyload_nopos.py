@@ -10,7 +10,7 @@ from stanfordcorenlp import StanfordCoreNLP
 import string
 
 ''' Location of the dataset'''
-GLOVE_DIR = 'Glove'
+GLOVE_DIR = 'data/Glove'
 def clean_str(string):
     """
     Tokenization/string cleaning for dataset

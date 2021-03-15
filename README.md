@@ -1,6 +1,8 @@
 # IAEA
 IAEA (Integrity-Aware Extractive-Abstractive realtime event summarization) is an unified extractive-abstractive framework for realtime event summarization. Our key idea is to integrate an inconsistency detection module to preserve the integrity of the summaries in each time slice.
 
+As the limitation of LFS, the Glove pre-trained embedding dataset can be downloaded from [Google Drive](https://drive.google.com/drive/folders/1rSzKk4mfbTwLUAlPttJfz49EZv9uChLn?usp=sharing).
+
 ## HID_Model
 ### Requirements
 * Hardwares: a machine with two Intel(R) Xeon(R) CPU E5-2678 v3 @ 2.50GHz, 256 GB main memory and a GeForce RTX 2080 Ti graphics card
@@ -29,7 +31,7 @@ After the above steps, data/inconsistent_weight.npy and data/inconsistent_bias.n
 * Hardwares: a machine with two Intel(R) Xeon(R) CPU E5-2678 v3 @ 2.50GHz, 256 GB main memory and a GeForce RTX 2080 Ti graphics card
 * OS: Ubuntu 18.04
 * Packages:
-    * python3.6 
+    * python3.5
     * tensorflow 1.2.1-gpu
 
 **Note**: you can use the command to start a tf1.2.1-gpu docker
@@ -43,7 +45,7 @@ docker exec -it tf1.2 /bin/bash
 ```shell script
 python data/IAEA/make_datafiles_testdata.py data/IAEA/twitter_final/train
 ```
-run this command to get train dataset, to same to valid and test dataset.
+Run this command to get train dataset, to same to valid and test dataset.
 
 
 **Note**:you can skip this step and then use the processed dataset of `data/IAEA/finished_files_twitter` folder
@@ -72,11 +74,11 @@ python main.py --model=rewriter --mode=train --data_path=data/IAEA/finished_file
 
 - Add coverage mechanism
 ```shell script
-python main.py  --model=rewriter --mode=train --data_path=data/IAEA/finished_files_twitter/chunked/train_* --vocab_path=data/IAEA/finished_files_twitter/vocab --log_root=log_rewriter --exp_name=exp_sample --batch_size=5 --max_train_iter=1000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True --max_enc_steps=400 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10 --coverage=True --convert_to_coverage_model=True
+python main.py --model=rewriter --mode=train --data_path=data/IAEA/finished_files_twitter/chunked/train_* --vocab_path=data/IAEA/finished_files_twitter/vocab --log_root=log_rewriter --exp_name=exp_sample --batch_size=5 --max_train_iter=1000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True --max_enc_steps=400 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10 --coverage=True --convert_to_coverage_model=True
 ```
 
 ```shell script
-python main.py  --model=rewriter --mode=train --data_path=data/IAEA/finished_files_twitter/chunked/train_* --vocab_path=data/IAEA/finished_files_twitter/vocab --log_root=log_rewriter --exp_name=exp_sample --batch_size=5 --max_train_iter=1000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True --max_enc_steps=400 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10 --coverage=True
+python main.py --model=rewriter --mode=train --data_path=data/IAEA/finished_files_twitter/chunked/train_* --vocab_path=data/IAEA/finished_files_twitter/vocab --log_root=log_rewriter --exp_name=exp_sample --batch_size=5 --max_train_iter=1000 --intradecoder=True --use_temporal_attention=True --eta=2.5E-05 --rl_training=True --max_enc_steps=400 --max_dec_steps=100 --save_model_every=100 --model_max_to_keep=10 --coverage=True
 ```
 
 
