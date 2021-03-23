@@ -271,7 +271,7 @@ class SentenceSelector(object):
       sent_feats = tf.contrib.layers.fully_connected(art_enc_inputs, hps.hidden_dim_selector, activation_fn=tf.tanh) # (batch_size, max_art_len, hidden_dim)   # Sentence embedding
       # sent_feats = tf.layers.dropout(sent_feats, rate=FLAGS.dropout_rate, training=FLAGS.is_training)  # dropout when train
 
-      weight_Dense = np.load("data/inconsistent_weigh.npy")  # change your own file path
+      weight_Dense = np.load("data/inconsistent_weight.npy")  # change your own file path
       weight_Dense_2 = tf.convert_to_tensor(weight_Dense)
       weight_Dense = tf.get_variable("weight_Dense", initializer=weight_Dense_2, trainable=False)
       bias_Dense = np.load("data/inconsistent_bias.npy")  # change your own file path

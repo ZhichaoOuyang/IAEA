@@ -7,7 +7,7 @@ import tensorflow as tf
 from batcher import Batcher
 import sys
 sys.path.append(r'/workspace/data/chao/IAEA/IAEA-Model/end2end')     # change your own file path
-import beam_search
+import beam_search2 as beam_search
 import data
 import pickle as pk
 import json
